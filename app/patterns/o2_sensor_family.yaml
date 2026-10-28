@@ -1,0 +1,72 @@
+# Playbook: O2 sensor health (P0133 slow response / P0135 / P0141 heaters) —
+# doc 02 §3: the sensor must switch 0.1–0.9 V rapidly; slow/stuck = dying
+# sensor or wiring. Counterfeit O2 sensors are endemic on the local market —
+# the part-number photo card is there for a reason (doc 11 §5).
+id: o2_sensor_family
+name_fr: "Sonde O2 en fin de vie / circuit sonde (P0133/P0135/P0141)"
+triggers:
+  # DTC-gated (not flag-gated): a sluggish trace alone, without a code, stays
+  # a flag in the digest — never a diagnosis by itself.
+  dtcs: [P0130, P0133, P0134, P0135, P0141]
+  flags: []
+causes:
+  - id: o2_sensor_aging
+    label_fr: "Sonde O2 paresseuse (encrassée, plomb/silicone, fin de vie)"
+    base_prior: 0.28
+    boosted_by: [o2_sluggish, o2_stuck]
+    suppressed_by: []
+    chips_boost: [power_loss]
+    cards: [tap_test, photo_maf_part_number]
+    fix:
+      parts: [{ref: o2_sensor_b1, qty: 1}]
+      labor_h: 0.5
+      procedure:
+        - "Confirmer la paresse (l'agent l'a mesurée: σ de commutation faible)."
+        - "Avant de condamner: photo du numéro de pièce — sondes contrefaites = récidive garantie."
+        - "Remplacer la sonde B1S1, clé à sonde, jamais de graisse sur le filetage anti-gripage fournie."
+      post_repair_steps:
+        - "Ne jamais utiliser de silicone RTV près de l'admission sur un moteur à sonde O2 — les vapeurs tuent les sondes neuves."
+  - id: o2_heater_circuit
+    label_fr: "Circuit de préchauffage sonde (fusible, relais, câblage)"
+    base_prior: 0.12
+    boosted_by: []
+    suppressed_by: []
+    chips_boost: []
+    cards: [wiggle_test, ground_inspection]
+    fix:
+      parts: [{ref: o2_fuse, qty: 1}]
+      labor_h: 0.6
+      procedure:
+        - "Mesurer la tension d'alimentation du préchauffage (contact ON)."
+        - "Test de flexion du faisceau de sonde: décrochage = câblage."
+  - id: o2_wiring_intermittent
+    label_fr: "Câblage sonde intermittent (masses, connecteur)"
+    base_prior: 0.10
+    boosted_by: []
+    suppressed_by: []
+    chips_boost: []
+    cards: [wiggle_test]
+    fix:
+      parts: []
+      labor_h: 0.8
+      procedure:
+        - "Test de flexion sur le faisceau de sonde, moteur tournant."
+        - "Réparer le point de contact trouvé (l'agent l'a horodaté)."
+  - id: o2_contamination
+    label_fr: "Sonde empoisonnée (silicone, huile, additif carburant)"
+    base_prior: 0.08
+    boosted_by: [o2_stuck]
+    suppressed_by: []
+    chips_boost: []
+    cards: [photo_spark_plugs]
+    fix:
+      parts: [{ref: o2_sensor_b1, qty: 1}]
+      labor_h: 0.5
+      procedure:
+        - "Chercher la SOURCE de contamination avant de remplacer (fuite d'huile en amont, RTV récent)."
+        - "Sinon la sonde neuve meurt pareil."
+verification:
+  drive_cycle: generic_obd2
+  recheck_mode06: ["1_2", "1_3"]
+  note_fr: "Après remplacement: le moniteur O2 doit refaire un cycle complet — le Mode $06 temps de réponse doit repasser."
+notes_fr: "Sur ce parc, sonde d'occasion = contrefaçon probable. Le photo-numéro de pièce est systématique (doc 11 §5)."

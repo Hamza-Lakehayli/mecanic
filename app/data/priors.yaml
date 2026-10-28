@@ -1,0 +1,198 @@
+# Deterministic priors (doc 12 §1: "chips + measurements -> deterministic
+# rules, no LLM in the loop, exact priors, works offline").
+# Every entry traces to a diagnostic decision (doc 12 §3) — the chip banks
+# are v1; exact lists get validated/killed in the demo weeks (doc 15 stage 0).
+
+symptoms:
+  mil_on:
+    label_fr: "Voyant moteur allumé"
+    prior_effects: {}
+  hissing:
+    label_fr: "Sifflement d'air"
+    prior_effects: {vacuum_leak: 1.8, exhaust_leak_upstream: 1.4}
+  rough_idle:
+    label_fr: "Ralenti instable / tremble"
+    prior_effects: {ignition_coil: 1.4, spark_plug_worn: 1.3, lean_misfire: 1.3, egr_leaking: 1.3, post_repair_config_missing: 1.3}
+  power_loss:
+    label_fr: "Manque de puissance"
+    prior_effects: {maf_underreport: 1.4, fuel_delivery_weak: 1.4, egr_passage_clogged: 1.3, dpf_soot_overload: 1.3, dpf_clogged_blocked: 1.3, fuel_filter_clogged: 1.3}
+  hard_start:
+    label_fr: "Démarrage difficile"
+    prior_effects: {fuel_delivery_weak: 1.4, battery_worn: 1.4, glow_plug_worn: 1.4, glow_module_relay: 1.4, battery_marginal_cold: 1.2}
+  battery_light:
+    label_fr: "Voyant batterie allumé"
+    prior_effects: {alternator_fault: 1.8}
+  black_smoke:
+    label_fr: "Fumée noire"
+    prior_effects: {engine_root_cause: 1.2, egr_passage_clogged: 1.2, dpf_soot_overload: 1.6, dpf_clogged_blocked: 1.6}
+  white_smoke:
+    label_fr: "Fumée blanche persistante"
+    prior_effects: {compression_low: 1.6, glow_plug_worn: 1.4}
+  blue_smoke:
+    label_fr: "Fumée bleue (huile)"
+    prior_effects: {compression_low: 1.4}
+  exhaust_smell:
+    label_fr: "Odeur d'échappement/gaz"
+    prior_effects: {dpf_interaction: 1.5}
+  squeal_noise:
+    label_fr: "Crissement aigu (courroie)"
+    prior_effects: {belt_slipping: 2.0}
+  low_heat_cabin:
+    label_fr: "Pas de chaleur à l'habitacle"
+    prior_effects: {thermostat_stuck_open: 1.6}
+  coolant_loss:
+    label_fr: "Perte de liquide de refroidissement"
+    prior_effects: {compression_low: 1.3}
+  rotten_egg_smell:
+    label_fr: "Odeur d'œuf pourri (soufre)"
+    prior_effects: {catalyst_worn: 1.6}
+  fuel_smell:
+    label_fr: "Odeur de carburant"
+    prior_effects: {fuel_delivery_weak: 1.2}
+
+conditions:
+  cold_only:
+    label_fr: "Seulement à froid"
+    prior_effects: {vacuum_leak: 1.3, thermostat_stuck_open: 1.3, compression_low: 1.1, glow_plug_worn: 1.3, glow_module_relay: 1.3}
+  hot_only:
+    label_fr: "Seulement à chaud"
+    prior_effects: {fuel_delivery_weak: 1.1}
+  under_load:
+    label_fr: "Sous charge / en côte"
+    prior_effects: {fuel_delivery_weak: 1.6, injector_clogged: 1.3, egr_passage_clogged: 1.2, fuel_filter_clogged: 1.6, leak_off_lines: 1.4, fuel_pump_weak: 1.4}
+  idle_only:
+    label_fr: "Au ralenti seulement"
+    prior_effects: {vacuum_leak: 1.6, egr_leaking: 1.4}
+  rain:
+    label_fr: "Par temps humide/pluie"
+    prior_effects: {ignition_coil: 1.6}
+  after_refuel:
+    label_fr: "Juste après le plein"
+    prior_effects: {gas_cap_seal: 2.2, purge_valve_stuck: 1.3, evap_leak_small: 1.2}
+  morning:
+    label_fr: "Le matin (première sortie)"
+    prior_effects: {vacuum_leak: 1.1, thermostat_stuck_open: 1.1}
+  at_speed:
+    label_fr: "À vitesse stabilisée"
+    prior_effects: {catalyst_worn: 1.1}
+
+# Mechanical / body complaints — NOT data-detectable: these never rank
+# hypotheses; triage routes them to physical inspection (doc 00 scope
+# honesty, doc 10 §3C: routing 20% of jobs away is what sells the other 80%).
+# The garage reality: FR + Darija mixed in one sentence ("la porte dyal
+# tomobil makat7elsh") is the norm, not the exception.
+mechanical:
+  door_window_issue:
+    label_fr: "Porte/vitre/coffre bloqué (carrosserie)"
+  suspension_knock:
+    label_fr: "Cognement suspension"
+  brake_noise:
+    label_fr: "Bruit de freins"
+  clutch_slip:
+    label_fr: "Embrayage qui patine"
+  steering_play:
+    label_fr: "Jeu dans la direction"
+  body_rattle:
+    label_fr: "Grincement/vibration carrosserie"
+
+# Measurement widgets -> exact priors keyed "<metric>:<verdict>"
+measurements:
+  fuel_pressure_rail:BAD:
+    prior_effects: {fuel_delivery_weak: 2.6, injector_clogged: 1.2, fuel_filter_clogged: 2.6, leak_off_lines: 1.3, fuel_pump_weak: 1.5}
+  fuel_pressure_rail:OK:
+    prior_effects: {fuel_delivery_weak: 0.35}
+  compression_variance:BAD:
+    prior_effects: {compression_low: 3.0}
+  compression_variance:OK:
+    prior_effects: {compression_low: 0.3}
+  battery_rest_v:BAD:
+    prior_effects: {battery_worn: 2.6}
+  battery_rest_v:OK:
+    prior_effects: {battery_worn: 0.4}
+  cranking_v:BAD:
+    prior_effects: {battery_worn: 2.8}
+  cranking_v:OK:
+    prior_effects: {battery_worn: 0.4}
+  ect_vs_ir_delta:OK:
+    prior_effects: {coolant_temp_sensor_bias: 0.3, thermostat_stuck_open: 1.4}
+  ect_vs_ir_delta:BAD:
+    prior_effects: {coolant_temp_sensor_bias: 2.8}
+  glow_plug_resistance:BAD:
+    prior_effects: {glow_plug_worn: 3.0, glow_module_relay: 1.2, battery_marginal_cold: 0.5}
+  glow_plug_resistance:OK:
+    prior_effects: {glow_plug_worn: 0.3}
+
+# Assisted physical tests -> priors keyed by result (doc 11 §3 verdict logic)
+physical_tests:
+  spray_test:
+    outcomes:
+      positive:
+        {vacuum_leak: 3.0, exhaust_leak_upstream: 0.4, egr_leaking: 0.5, intake_restriction: 0.5}
+      negative:
+        {vacuum_leak: 0.35, exhaust_leak_upstream: 0.5, egr_leaking: 0.6}
+  unplug_maf:
+    outcomes:
+      engine_improves:
+        {maf_underreport: 3.0, maf_bias_gravity: 2.0, vacuum_leak: 0.5, fuel_delivery_weak: 0.4}
+      no_change:
+        {maf_underreport: 0.4, maf_bias_gravity: 0.4}
+  swap_coil:
+    outcomes:
+      misfire_followed_coil:
+        {ignition_coil: 3.2, spark_plug_worn: 0.5, injector_clogged: 0.4, lean_misfire: 0.3, compression_low: 0.3, egr_washover: 0.4}
+      misfire_stayed:
+        {ignition_coil: 0.3, spark_plug_worn: 0.6, injector_clogged: 1.4, lean_misfire: 1.4}
+  electrical_load_test:
+    outcomes:
+      voltage_sag:
+        {alternator_fault: 2.8, ground_corrosion: 1.6, battery_worn: 0.7}
+      voltage_stable:
+        {alternator_fault: 0.3, ground_corrosion: 0.6}
+  fan_response_check:
+    outcomes:
+      fan_running_cold:
+        {fan_always_on: 3.0}
+      fan_normal_cycle:
+        {fan_always_on: 0.3, thermostat_stuck_open: 1.5, coolant_temp_sensor_bias: 0.7}
+  wiggle_test:
+    outcomes:
+      dropout_found:
+        {egr_valve_electrical: 2.6, ignition_coil: 1.6, ground_corrosion: 2.0, bus_wire_intermittent: 3.2, module_power_ground: 1.6}
+      no_dropout:
+        {egr_valve_electrical: 0.5, ground_corrosion: 0.6}
+  tap_test:
+    outcomes:
+      signal_dropout:
+        {o2_sensor_biased: 2.4, o2_sensor_aging: 2.4, o2_downstream_lazy: 2.2, egr_valve_electrical: 2.0}
+      no_effect:
+        {o2_sensor_biased: 0.6}
+  verify_injector_coding:
+    outcomes:
+      not_coded:
+        {post_repair_config_missing: 3.0, injector_clogged: 1.3}
+      coded:
+        {post_repair_config_missing: 0.25}
+  check_gas_cap:
+    outcomes:
+      loose_damaged:
+        {gas_cap_seal: 3.2, evap_leak_small: 0.5, purge_valve_stuck: 0.6}
+      sealed_ok:
+        {gas_cap_seal: 0.3}
+  dpf_highway_regen:
+    outcomes:
+      regen_completed:
+        {dpf_soot_overload: 3.0, dpf_clogged_blocked: 0.3, dpf_diff_sensor: 0.5}
+      no_regen:
+        {dpf_soot_overload: 0.3, dpf_clogged_blocked: 2.8}
+  leak_off_inspection:
+    outcomes:
+      normal:
+        {leak_off_lines: 0.3, fuel_filter_clogged: 1.2, fuel_pump_weak: 1.1}
+      bubbles_found:
+        {leak_off_lines: 3.0}
+  ground_inspection:
+    outcomes:
+      normal:
+        {module_power_ground: 0.3, bus_wire_intermittent: 1.2}
+      corroded:
+        {module_power_ground: 2.8, bus_wire_intermittent: 1.3}

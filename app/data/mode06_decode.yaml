@@ -1,0 +1,15 @@
+# Mode $06 decode library (doc 02 §5: "a self-built library is a genuine
+# asset"; doc 17 gap #2: bootstrap from public docs + our own sessions,
+# Dacia/Renault dCi first). Keys are "<MID>_<TID>" — quoted: bare 1_2 would
+# parse as the integer 12 (YAML 1.1 underscore literals).
+
+"1_2": {name_fr: "Temps de réponse sonde O2 B1S1", unit: "s", fail_side: high}
+"1_3": {name_fr: "Amplitude de commutation O2 B1S1", unit: "V", fail_side: low}
+"1_4": {name_fr: "Température de régulation thermostat", unit: "°C", fail_side: low}
+"1_5": {name_fr: "Rendement catalyseur B1", unit: "%", fail_side: low}
+"1_6": {name_fr: "Rendement catalyseur B2", unit: "%", fail_side: low}
+"1_7": {name_fr: "Débit EGR mesuré", unit: "%", fail_side: low}
+"2_1": {name_fr: "Ratio bosse/pente sonde O2 B1S1", unit: "ratio", fail_side: high}
+"10_02": {name_fr: "Compteur ratés type A (cycle)", unit: "count", fail_side: high}
+"10_03": {name_fr: "Compteur ratés type B (cycle)", unit: "count", fail_side: high}
+"21_1": {name_fr: "Montée de pression EVAP (test purge)", unit: "kPa", fail_side: low}

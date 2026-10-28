@@ -1,0 +1,28 @@
+# Labeled CI scenario — the diesel-parc differentiator (doc 05 §7): P2463
+# on a city-only Dacia dCi. The freeze frame says it all (18% load at 14 km/h
+# = regen never finishes) and the 30-min highway regen attempt SUCCEEDS —
+# the verdict is the driving pattern, not a 4000 MAD FAP. Diesel: no O2/trims.
+name: p2463_dpf_urban
+adapter: {chip: "ELM327 v1.5", max_poll_hz: 4}
+vehicle:
+  vin: "UU1HSDC3456440002"
+  decode: {make: Dacia, model: Logan, year: 2014, engine: "1.5 dCi K9K", fuel: diesel, displacement_l: 1.5}
+  ecus: {7E8: ECM}
+  baseline: {RPM: 820, LOAD: 18, ECT: 86, IAT: 30, MAF: 11.2, MAP: 34, SPEED: 0, TPS: 8, BATV: 14.1, EGR_ERR: 0}
+  readiness: {mil: true, dtc_count: 1, monitors: {misfire: complete, fuel_system: complete, cc_component: complete}}
+  dtcs: {stored: [P2463], pending: [], permanent: []}
+  freeze_frame: {dtc: P2463, values: {RPM: 1150, ECT: 84, LOAD: 18, SPEED: 14}}
+timeline:
+  - {window: warm_up, duration_s: 60, values: {RPM: 950, ECT: {from: 22, to: 84}, MAF: 11.2}, noise: {RPM: 15}}
+  - {window: idle, duration_s: 100, values: {RPM: 820, ECT: 86, MAF: 11.2, LOAD: 18, BATV: 14.1}, noise: {RPM: 15}}
+  - {window: cruise, duration_s: 100, values: {RPM: 2000, SPEED: 42, LOAD: 24, MAF: 16, ECT: 86}, noise: {RPM: 20}}
+complaint:
+  text: "Fumée noire et le moteur manque de puissance, surtout en ville"
+  chips: [black_smoke, power_loss]
+simulate:
+  - {card: dpf_highway_regen, result: regen_completed}
+expected:
+  root_cause: dpf_soot_overload
+  min_confidence: 70
+  status: verdict
+  must_flags: [urban_profile_freeze]

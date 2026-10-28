@@ -1,0 +1,31 @@
+# Labeled CI scenario — thermostat stuck open (P0128): the warm-up curve is
+# flat-ish (doc 10 §A: "cheapest high-confidence test in the book"). Diesel
+# dCi engine — the Morocco parc core.
+name: p0128_thermostat_dci
+adapter: {chip: "ELM327 v1.5", max_poll_hz: 4}
+vehicle:
+  vin: "UU1CBDCK123456789"
+  decode: {make: Dacia, model: Sandero, year: 2017, engine: "1.5 dCi K9K", fuel: diesel, displacement_l: 1.5}
+  ecus: {7E8: ECM}
+  baseline: {RPM: 820, LOAD: 18, ECT: 55, IAT: 26, MAF: 12.0, MAP: 29, SPEED: 0, TPS: 9, STFT_B1: 0, LTFT_B1: 0, O2_B1S1: 0.45, BATV: 14.0, EGR_ERR: 0}
+  readiness: {mil: true, dtc_count: 1, monitors: {misfire: complete, fuel_system: complete, cc_component: complete, catalyst: complete, evap: incomplete, o2_sensor: complete, o2_heater: complete, egr: incomplete}}
+  dtcs: {stored: [P0128], pending: [], permanent: []}
+  freeze_frame: {dtc: P0128, values: {RPM: 830, ECT: 41, LOAD: 18, IAT: 25}}
+  mode06:
+    - {mid: 1, tid: 4, value: 58, min: 70, max: 110}
+timeline:
+  # stuck-open thermostat: 16 -> 34 over 600 s (slope ~0.03 °C/s), never passes 45
+  - {window: warm_up, duration_s: 600, values: {RPM: 820, ECT: {from: 16, to: 34}, MAF: 12}, noise: {ECT: 0.4}}
+  - {window: idle, duration_s: 90, values: {RPM: 820, ECT: 38, LTFT_B1: 1, STFT_B1: 0, MAF: 12.0}, noise: {RPM: 9, O2_B1S1: 0.1}}
+  - {window: cruise, duration_s: 90, values: {RPM: 2000, SPEED: 60, LOAD: 24, ECT: 44, LTFT_B1: 1, STFT_B1: 0}}
+complaint:
+  text: "Le moteur ne monte jamais en temperature, pas de chaleur a l'habitacle le matin"
+  chips: [low_heat_cabin, morning]
+simulate:
+  - {card: fan_response_check, result: fan_normal_cycle}
+  - {card: ir_gun_ect_check, value: 2.0}
+expected:
+  root_cause: thermostat_stuck_open
+  min_confidence: 70
+  status: verdict
+  must_flags: [warmup_slow]

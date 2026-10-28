@@ -1,0 +1,72 @@
+# Playbook: glow plug family (P0670s / P0380s) — the diesel cold-start gate
+# (doc 05 §7). Morocco mornings + dCi + glow plug = the classic winter queue
+# at the garage. Discriminated by the freeze frame (how cold was it?) and
+# the per-plug resistance measurement.
+id: glow_plug_family
+name_fr: "Bougies de préchauffage / relais (démarrage à froid diesel)"
+triggers:
+  dtcs: [P0380, P0381, P0382, P0383, P0384, P0670, P0671, P0672, P0673, P0674, P0675, P0676]
+  flags: []
+causes:
+  - id: glow_plug_worn
+    label_fr: "Bougies de préchauffage HS (une ou plusieurs — fumée blanche au démarrage)"
+    base_prior: 0.34
+    boosted_by: [cold_soak_freeze]
+    suppressed_by: []
+    chips_boost: [hard_start, cold_only, white_smoke]
+    cards: [gauge_glow_plugs]
+    fix:
+      parts: [{ref: glow_plug_set, qty: 4}]
+      labor_h: 1.0
+      procedure:
+        - "La mesure vient de confirmer: résistance hors plage (l'agent a comparé par bougie)."
+        - "Remplacer les bougies défectueuses — attention au couple de serrage (cassées dans la culasse = mauvaise journée)."
+        - "dCi: vérifier aussi le relais de préchauffage si les 4 sont mortes d'un coup."
+      post_repair_steps:
+        - "Après remplacement: attendre le témoin de préchauffage AVANT de démarrer par froid (<5°C) — le pack s'use sinon."
+  - id: glow_module_relay
+    label_fr: "Relais/unité de préchauffage (toutes les bougies mortes d'un coup)"
+    base_prior: 0.15
+    boosted_by: [cold_soak_freeze]
+    suppressed_by: []
+    chips_boost: [hard_start, cold_only]
+    cards: [gauge_glow_plugs, ground_inspection]
+    fix:
+      parts: [{ref: glow_plug_relay, qty: 1}]
+      labor_h: 0.6
+      procedure:
+        - "Les 4 bougies mesurent OK mais aucune ne chauffe = relais/unité."
+        - "Contrôler l'alimentation du relais et sa commande ECU."
+  - id: battery_marginal_cold
+    label_fr: "Batterie limite à froid (préchauffage sous-alimenté)"
+    base_prior: 0.12
+    boosted_by: [voltage_crank_dip, voltage_low]
+    suppressed_by: []
+    chips_boost: [hard_start]
+    cards: [gauge_battery_rest, gauge_cranking_volt]
+    fix:
+      parts: [{ref: battery_12v, qty: 1}]
+      labor_h: 0.3
+      procedure:
+        - "Mesurer tension repos (<12,4 V = limite) et au démarrage (<9,6 V = HS)."
+        - "Le préchauffage est le plus gros consommateur au démarrage: une batterie limite le fait échouer."
+      post_repair_steps:
+        - "Après remplacement de batterie: réinitialiser le BMS/IBS si équipé (doc 02 §3) — sinon l'état de charge restera faux."
+  - id: winter_fuel_gelling
+    label_fr: "Gazole d'été en hiver (paraffine, filtre encrassé par le froid)"
+    base_prior: 0.06
+    boosted_by: [cold_soak_freeze]
+    suppressed_by: []
+    chips_boost: [cold_only]
+    cards: [gauge_fuel_pressure]
+    fix:
+      parts: [{ref: fuel_filter, qty: 1}]
+      labor_h: 0.4
+      procedure:
+        - "Panne apparue dès les premiers froids avec du gazole acheté en été: paraffine."
+        - "Filtre neuf + gazole d'hiver/additif; le réseau purgera au démarrage suivant."
+verification:
+  drive_cycle: generic_obd2
+  recheck_mode06: ["1_2"]
+  note_fr: "Vérifier au prochain froid matinal: témoin de préchauffe → démarrage net, pas de fumée blanche."
+notes_fr: "La trame de gel dit tout: à 3°C c'est le préchauffage; à 15°C le « froid difficile » n'est PAS des bougies — chercher ailleurs (compression, gazole)."

@@ -1,0 +1,80 @@
+# Playbook: EVAP family (P0440/P0445/P0455/P0456) — the after-refueling classic
+# (doc 02 §3). The gas cap is the #1 cause of P0455 "gross leak" right after a
+# fill-up — a 30-second check before any smoke-machine session.
+id: evap_family
+name_fr: "Fuite EVAP (vapeurs carburant) (P0440/455/456)"
+triggers:
+  dtcs: [P0440, P0441, P0445, P0446, P0455, P0456]
+  flags: []
+causes:
+  - id: gas_cap_seal
+    label_fr: "Bouchon de réservoir mal vissé / joint HS (post-plein)"
+    base_prior: 0.38
+    boosted_by: []
+    suppressed_by: []
+    chips_boost: [after_refuel, mil_on]
+    cards: [check_gas_cap]
+    fix:
+      parts: [{ref: gas_cap, qty: 1}]
+      labor_h: 0.1
+      procedure:
+        - "Dévisser, inspecter le joint, revisser jusqu'aux 3 clics (l'agent vient de le guider)."
+        - "Effacer le code (consentement), rouler 1 cycle — le moniteur EVAP doit repasser complet."
+      post_repair_steps:
+        - "Après chaque plein: 3 clics. Un bouchon mal vissé re-déclenchera le code en 1-2 cycles."
+  - id: purge_valve_stuck
+    label_fr: "Vanne purge EVAP coincée ouverte (aspiration continue)"
+    base_prior: 0.15
+    boosted_by: [trim_lean_overall]
+    suppressed_by: []
+    chips_boost: [after_refuel, rough_idle]
+    cards: [hold_2500_rpm]
+    fix:
+      parts: [{ref: purge_valve, qty: 1}]
+      labor_h: 0.5
+      procedure:
+        - "Tier C: commande de la vanne purge via VCI + surveillance pression réservoir."
+        - "Phase 1: test d'étanchéité visuel + comportement des trims au ralenti."
+  - id: evap_leak_small
+    label_fr: "Petite fuite EVAP (durite, joint, mise à l'air)"
+    base_prior: 0.14
+    boosted_by: []
+    suppressed_by: []
+    chips_boost: [fuel_smell]
+    cards: [smoke_machine, check_gas_cap]
+    fix:
+      parts: [{ref: evap_hose, qty: 1}]
+      labor_h: 0.8
+      procedure:
+        - "Machine à fumée sur le réseau EVAP: localiser le filament qui sort."
+        - "Remplacer la durite/le joint concerné."
+  - id: canister_sat
+    label_fr: "Canister à charbon saturé (essence liquide dedans)"
+    base_prior: 0.08
+    boosted_by: []
+    suppressed_by: []
+    chips_boost: []
+    cards: [smoke_machine]
+    fix:
+      parts: [{ref: charcoal_canister, qty: 1}]
+      labor_h: 1.0
+      procedure:
+        - "Vérifier le sur-remplissage (faire le plein à la poignée automatique, jamais le bec)."
+        - "Remplacer le canister si saturé."
+  - id: vent_valve
+    label_fr: "Vanne de mise à l'air bloquée (pression réservoir anormale)"
+    base_prior: 0.08
+    boosted_by: []
+    suppressed_by: []
+    chips_boost: []
+    cards: [smoke_machine]
+    fix:
+      parts: [{ref: vent_valve, qty: 1}]
+      labor_h: 0.5
+      procedure:
+        - "Contrôler le clapet de mise à l'air (gravier/eau)."
+verification:
+  drive_cycle: generic_obd2
+  recheck_mode06: ["21_1"]
+  note_fr: "Le moniteur EVAP est long à refaire un cycle complet (plein entre 15% et 85% requis). Ne pas effacer le code juste avant un CT — moniteur incomplet = refus."
+notes_fr: "Toujours lire la trame de gel: niveau de carburant au moment du code → juste après le plein? Le bouchon d'abord, la fumée ensuite."

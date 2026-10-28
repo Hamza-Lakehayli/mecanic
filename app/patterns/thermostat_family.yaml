@@ -1,0 +1,50 @@
+# Playbook: thermostat / warm-up (P0128) — "the cheapest high-confidence test
+# in the book" (doc 10 §3A).
+id: thermostat_family
+name_fr: "Thermostat / montée en température (P0128)"
+triggers:
+  dtcs: [P0128, P0125]
+  flags: [warmup_slow]
+causes:
+  - id: thermostat_stuck_open
+    label_fr: "Thermostat coincé ouvert (ne ferme plus le petit circuit)"
+    base_prior: 0.70
+    boosted_by: [warmup_slow]
+    suppressed_by: []
+    chips_boost: [cold_only, low_heat_cabin]
+    cards: [fan_response_check, ir_gun_ect_check]
+    fix:
+      parts: [{ref: thermostat, qty: 1}, {ref: coolant_g12, qty: 2}]
+      labor_h: 1.2
+      procedure:
+        - "Confirmer: courbe de montée lente déjà enregistrée par l'agent (le flag warmup_slow)."
+        - "Remplacer le thermostat + joint; purge du circuit selon procédure constructeur."
+  - id: coolant_temp_sensor_bias
+    label_fr: "Sonde de température d'eau fausse (compare pistolet IR)"
+    base_prior:  0.15
+    boosted_by: []
+    suppressed_by: [ir_gun_confirms]
+    chips_boost: []
+    cards: [ir_gun_ect_check]
+    fix:
+      parts: [{ref: coolant_temp_sensor, qty: 1}]
+      labor_h: 0.5
+      procedure:
+        - "Comparer sonde vs pistolet IR sur le boîtier thermostat (widget mesure — l'agent pré-remplit la tolérance)."
+  - id: fan_always_on
+    label_fr: "Ventilateur qui tourne en permanence (relais collé / capteur)"
+    base_prior: 0.15
+    boosted_by: []
+    suppressed_by: [fan_only_when_hot]
+    chips_boost: []
+    cards: [fan_response_check]
+    fix:
+      parts: [{ref: fan_relay, qty: 1}]
+      labor_h: 0.6
+      procedure:
+        - "Vérifier si le ventilateur tourne à froid (il ne doit pas). Relais/capteur à contrôler."
+verification:
+  drive_cycle: renault_dci_drive
+  recheck_mode06: ["1_4"]
+  note_fr: "Vérification: après remplacement, montée 20→90 °C en moins de ~10 minutes de conduite normale."
+notes_fr: "Moteur diesel: la montée en température est déjà lente par nature — le seuil du flag est calibré pour, mais toujours confirmer au pistolet IR avant de condamner."

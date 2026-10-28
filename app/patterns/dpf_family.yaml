@@ -1,0 +1,73 @@
+# Playbook: DPF family (P2463) — the diesel-parc differentiator (doc 05 §7).
+# Phase 1 honesty: soot load is an enhanced PID (Tier C, doc 10 §B) — at Tier
+# A/B the evidence is the code + freeze frame (urban profile = regen never
+# finishes) + the 30-minute highway regen attempt, which discriminates a
+# $0 driving-pattern problem from a $4000-dead-DPF verdict. That test saves
+# the customer from the classic false conviction (doc 02 §3 catalyst logic).
+id: dpf_family
+name_fr: "Filtre à particules colmaté / surcharge de suie (P2463)"
+triggers:
+  dtcs: [P2463, P2462, P2464, P2002]
+  flags: []
+causes:
+  - id: dpf_soot_overload
+    label_fr: "Surcharge de suie (profil urbain, régénération jamais terminée)"
+    base_prior: 0.30
+    boosted_by: [urban_profile_freeze]
+    suppressed_by: []
+    chips_boost: [black_smoke, power_loss]
+    cards: [dpf_highway_regen]
+    fix:
+      parts: []
+      labor_h: 0.5
+      procedure:
+        - "La régénération routière vient de RÉUSSIR (30 min à 2500–3000 tr/min) — le FAP est vivant."
+        - "Conseil d'usage: 1 sortie voie rapide de 30 min toutes les 2 semaines; éviter les mini-trips à froid."
+        - "Effacer le code (consentement), surveiller le compteur de régénération aux visites suivantes."
+      post_repair_steps:
+        - "Un P2463 sur profil urbain qui revient après une régénération réussie = problème d'injection/EGR en amont qui surproduit de la suie — creuser avant de condamner le FAP."
+  - id: dpf_clogged_blocked
+    label_fr: "FAP réellement colmaté (cendre/régénération impossible — suite pro)"
+    base_prior: 0.20
+    boosted_by: []
+    suppressed_by: [urban_profile_freeze]
+    chips_boost: [black_smoke, power_loss]
+    cards: [dpf_highway_regen]
+    fix:
+      parts: [{ref: dpf_cleaning_service, qty: 1}]
+      labor_h: 2.0
+      procedure:
+        - "La régénération routière a ÉCHOUÉ (30 min sans effet) — colmatage réel."
+        - "Nettoyage/régénération forcée en atelier pro (Tier C: régénération commandée via VCI, consentement requis) — remplacer en dernier recours."
+        - "Vérifier l'huile moteur: niveau monté = gazoil dilué par régénérations ratées — vidange AVANT qu'elle déborde."
+  - id: dpf_diff_sensor
+    label_fr: "Capteur de pression différentielle / tubulures bouchées (fausse alerte)"
+    base_prior: 0.12
+    boosted_by: []
+    suppressed_by: []
+    chips_boost: []
+    cards: [wiggle_test]
+    fix:
+      parts: [{ref: dpf_diff_sensor, qty: 1}]
+      labor_h: 0.7
+      procedure:
+        - "Contrôler les deux prises de pression du capteur (cassage, suie dans les durites)."
+        - "Purger/nettoyer les durites; comparer la lecture à l'arrêt (doit être ~0)."
+  - id: dpf_interaction_egr
+    label_fr: "Surtension de suie d'origine EGR/injection (le FAP est la victime)"
+    base_prior: 0.10
+    boosted_by: []
+    suppressed_by: []
+    chips_boost: [black_smoke]
+    cards: [egr_visual_check]
+    fix:
+      parts: []
+      labor_h: 1.0
+      procedure:
+        - "Le FAP colmaté répétitif = symptôme. Chercher la surproduction: EGR calaminée, injecteur qui goutte."
+        - "Vérifier l'EGR (le playbook EGR prend le relais si P0401 accompagne)."
+verification:
+  drive_cycle: generic_obd2
+  recheck_mode06: ["1_7"]
+  note_fr: "Après régénération réussie: le code s'efface au cycle suivant. Vérifier l'huile (dilution gazoil) à chaque visite suivante."
+notes_fr: "La question qui fait économiser 4000 MAD: « la régénération routière réussit-elle ? » — avant de vendre un FAP (doc 02 §3: ne jamais condamner sur le code seul)."

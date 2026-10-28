@@ -1,0 +1,63 @@
+# Playbook: charging system (P0562/P0563/P0620) — battery/alternator, doc 10 §A
+# "voltage PIDs" row + doc 11 electrical load test.
+id: charging_family
+name_fr: "Circuit de charge (P0562 / P062F / P0620)"
+triggers:
+  dtcs: [P0562, P0563, P0620, P056X]
+  flags: [voltage_low, voltage_crank_dip]
+causes:
+  - id: alternator_fault
+    label_fr: "Alternateur / régulateur intégré défaillant"
+    base_prior: 0.45
+    boosted_by: [voltage_low]
+    suppressed_by: [voltage_ok_under_load]
+    chips_boost: [battery_light]
+    cards: [electrical_load_test]
+    fix:
+      parts: [{ref: alternator, qty: 1}]
+      labor_h: 1.5
+      procedure:
+        - "Test de charge électrique: phares + ventilateur + dégivrage au ralenti — l'agent surveille la tension (sag < 13,5 V = circuit de charge)."
+        - "Vérifier la courroie et le connecteur avant de condamner l'alternateur."
+  - id: battery_worn
+    label_fr: "Batterie en fin de vie (ne tient plus la charge)"
+    base_prior: 0.30
+    boosted_by: [voltage_crank_dip]
+    suppressed_by: []
+    chips_boost: [hard_start]
+    cards: [gauge_battery_rest, gauge_cranking_volt]
+    fix:
+      parts: [{ref: battery_60ah, qty: 1}]
+      labor_h: 0.3
+      procedure:
+        - "Tension de repos (<12,4 V = batterie déchargée/usée) puis tension au démarrage (<9,6 V = batterie faible)."
+        - "Re-tester après charge d'entretien avant remplacement."
+  - id: ground_corrosion
+    label_fr: "Masse oxydée / câble de masse (chute de tension)"
+    base_prior: 0.15
+    boosted_by: [voltage_low]
+    suppressed_by: []
+    chips_boost: []
+    cards: [ground_inspection]
+    fix:
+      parts: [{ref: ground_cable, qty: 1}]
+      labor_h: 0.5
+      procedure:
+        - "Nettoyer les masses moteur/carrosserie; mesurer la chute de tension aux bornes (>0,3 V = résistance fautive)."
+  - id: belt_slipping
+    label_fr: "Courroie d'accessoires qui patine"
+    base_prior: 0.10
+    boosted_by: []
+    suppressed_by: []
+    chips_boost: [squeal_noise]
+    cards: []
+    fix:
+      parts: [{ref: aux_belt, qty: 1}]
+      labor_h: 0.7
+      procedure:
+        - "Inspecter/tendre/remplacer la courroie; bruit de glissement typique à l'accélération."
+verification:
+  drive_cycle: generic_obd2
+  recheck_mode06: []
+  note_fr: "Vérification: tension 13,8–14,4 V au ralenti sous charge électrique, au démarrage à chaud."
+notes_fr: "Avant de vendre un alternateur: 3 clients sur 4 dans ce cas repartent avec une batterie + nettoyage de masses seulement."

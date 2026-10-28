@@ -1,0 +1,31 @@
+# Labeled CI scenario — the flagship (doc 02 §2, doc 17 §4.1: Edge Impulse
+# air-leak case). Same code family as p0171_maf_dirty: the pipeline must
+# discriminate by DATA, not by code lookup.
+name: p0171_vacuum_leak
+adapter: {chip: "ELM327 v1.5", max_poll_hz: 4}
+vehicle:
+  vin: "UU1HSDC3456123456"
+  decode: {make: Dacia, model: Logan, year: 2016, engine: "1.6 MPI 8v", fuel: essence, displacement_l: 1.6}
+  ecus: {7E8: ECM}
+  baseline: {RPM: 810, LOAD: 22, ECT: 88, IAT: 30, MAF: 2.9, MAP: 32, SPEED: 0, TPS: 12, STFT_B1: 0, LTFT_B1: 0, O2_B1S1: 0.45, BATV: 14.1, EGR_ERR: 0}
+  readiness: {mil: true, dtc_count: 1, monitors: {misfire: complete, fuel_system: complete, cc_component: complete, catalyst: complete, evap: incomplete, o2_sensor: complete, o2_heater: complete}}
+  dtcs: {stored: [P0171], pending: [], permanent: [P0171]}
+  freeze_frame: {dtc: P0171, values: {RPM: 812, ECT: 12, LOAD: 22, LTFT_B1: 21, STFT_B1: 3}}
+  mode06:
+    - {mid: 1, tid: 2, value: 0.8, min: 0.2, max: 1.0}
+    - {mid: 1, tid: 5, value: 72, min: 60, max: 100}
+timeline:
+  - {window: warm_up, duration_s: 120, values: {RPM: 1000, ECT: {from: 25, to: 72}, MAF: 3.5}}
+  - {window: idle, duration_s: 90, values: {RPM: 810, LTFT_B1: 19, STFT_B1: 4, MAF: 2.9, ECT: 88}, noise: {LTFT_B1: 0.8, STFT_B1: 0.5, RPM: 12, O2_B1S1: 0.15}}
+  - {window: rev_hold, duration_s: 45, values: {RPM: 2500, LTFT_B1: 6, STFT_B1: 2, MAF: 9.0, ECT: 88}, noise: {LTFT_B1: 0.5, RPM: 20}}
+  - {window: cruise, duration_s: 120, values: {RPM: 2600, SPEED: 64, LOAD: 28, LTFT_B1: 5, STFT_B1: 1, MAF: 11.5, ECT: 88}, noise: {LTFT_B1: 0.6}}
+complaint:
+  text: "Sifflement d'air au ralenti, le moteur broute et consomme plus"
+  chips: [hissing, idle_only]
+simulate:
+  - {card: spray_test, result: positive, location: "durite PCV"}
+expected:
+  root_cause: vacuum_leak
+  min_confidence: 70
+  status: verdict
+  must_flags: [trim_idle_dominant]

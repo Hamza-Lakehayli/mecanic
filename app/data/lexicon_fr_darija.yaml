@@ -1,0 +1,36 @@
+# FR/Darija complaint lexicon — chip terms (doc 12, doc 17 gap #4).
+# v1 starter set; extraction quality is an explicit LLM-test-week item.
+# Darija in Latin script AND Arabic script, French mixed — the garage reality.
+
+mil_on: ["voyant moteur", "voyant allume", "check engine", "lumiere moteur", "tal3 daw", "tala3 daw", "mcha liya daw", "msha daw", "msha do", "daw dial motor", "daw tal3", "ضو", "طلع ضو"]
+hissing: [sifflement, siffle, "bruit d'air", souffle, siffla, hawa, هواء, صفير]
+rough_idle: ["ralenti instable", "ralenti irregulier", tremble, cale, hoche, kaytremel, "mat-stab", يرتجف]
+power_loss: ["manque de puissance", "pas de puissance", "perd de la puissance", "machi 9wa", "makayqderch", قوة]
+hard_start: ["dure a demarrer", "mal demarre", "demarrage difficile", "kayebda m3aqeb", "3aqeb", "yebda b3atf"]
+battery_light: ["voyant batterie", "lumiere batterie", "daya dial battery", ضوء البطارية]
+black_smoke: ["fumee noire", "fumée noire", "dkhan k7el", دخان أسود]
+white_smoke: ["fumee blanche", "fumée blanche", "dkhan byed", دخان أبيض]
+blue_smoke: ["fumee bleue", "fumée bleue", دخان أزرق]
+exhaust_smell: ["odeur de gaz", "odeur d'echappement", "riha dial dkhan", ريحة]
+squeal_noise: [crissement, "bruit aigu", crisser, siren, صرير]
+low_heat_cabin: ["pas de chaud", "chauffage faible", "pas de chaleur", "mamakhach se7ana", سخون]
+coolant_loss: ["perte de liquide", "liquide de refroidissement", "mayt f radiateur", ماء الراديتر]
+rotten_egg_smell: ["oeuf pourri", soufre, "riha khayba", كبريت]
+fuel_smell: ["odeur de carburant", "riha dial mazout", "riha dial essence", ريحة المازوط]
+
+cold_only: ["a froid", "au froid", "le matin", f sa7, berd, "fi lberd", في البرد]
+hot_only: ["a chaud", "une fois chaud", "fi ss7ana", سخون]
+under_load: ["sous charge", "en cote", "cote", "3end t9al", "kaytqal", بحمل]
+idle_only: ["au ralenti", "a l'arret", ralenti, "fi l'arrêt", وقوف]
+after_refuel: ["apres le plein", "juste apres le plein", "be3d ma 3merit", بعد التعبئة]
+rain: [pluie, "temps humide", matar, "kan t9tor", مطر]
+morning: ["le matin", "sbah", الصباح]
+at_speed: ["en route", "a vitesse", "fi Tariq", "sur route"]
+
+# Mechanical / body complaints (route-out bank — code-switched FR/Darija forms)
+door_window_issue: ["la porte", "porte dyal", "makat7elsh", "makatghelsh", "bab", "باب", "portiere", "portière", "vitre", "coffre"]
+suspension_knock: [cognement, "bruit de suspension", amortisseur, "bruit bosse", "f trou"]
+brake_noise: ["bruit de frein", "grincement frein", "les freins", "crissement frein", "frein"]
+clutch_slip: [embrayage, "debrayage", clutch, friction, "l'embrayage"]
+steering_play: ["jeu dans la direction", "volant bouge", "la direction", "cran volant"]
+body_rattle: [grincement, vibration, "tableau de bord", "plastique kay-9re3"]

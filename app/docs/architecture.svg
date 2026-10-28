@@ -1,0 +1,281 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1480" height="1930" viewBox="0 0 1480 1930" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="arrS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker>
+    <marker id="arrG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#d97706"/></marker>
+  </defs>
+
+  <rect width="1480" height="1930" fill="#f8fafc"/>
+
+  <!-- ============ TITRE ============ -->
+  <text x="740" y="44" text-anchor="middle" font-size="28" font-weight="bold" fill="#0f172a">MECANIC — le fonctionnement de l'app</text>
+  <text x="740" y="72" text-anchor="middle" font-size="14.5" fill="#475569">producteurs → registre de preuves → consommateurs — l'agent ne voit jamais les octets bruts (doc 14)</text>
+
+  <!-- ============ SOURCES ============ -->
+  <text x="30" y="116" font-size="12.5" font-weight="bold" letter-spacing="2" fill="#0d9488">SOURCES — CHAQUE SOURCE PARLE LES MÊMES ÉVÉNEMENTS TYPÉS</text>
+
+  <rect x="30" y="128" width="340" height="96" rx="12" fill="#f0fdfa" stroke="#0d9488" stroke-width="1.6"/>
+  <text x="46" y="152" font-size="14" font-weight="bold" fill="#0f766e">PILOTE ELM327</text>
+  <text x="46" y="172" font-size="10.5" fill="#134e4a">adaptateur réel : BLE · USB · TCP (ELM327-emulator)</text>
+  <text x="46" y="188" font-size="10.5" fill="#134e4a">init AT · empreinte de puce (détection de clones)</text>
+  <text x="46" y="204" font-size="10.5" fill="#134e4a">parse tolérant — NO DATA = non supporté, pas un crash</text>
+
+  <rect x="390" y="128" width="340" height="96" rx="12" fill="#f0fdfa" stroke="#0d9488" stroke-width="1.6"/>
+  <text x="406" y="152" font-size="14" font-weight="bold" fill="#0f766e">ÉMULATEUR</text>
+  <text x="406" y="172" font-size="10.5" fill="#134e4a">véhicules YAML scriptés — 15 cas de CI étiquetés</text>
+  <text x="406" y="188" font-size="10.5" fill="#134e4a">parlent le VRAI hex ELM327 via le même pilote</text>
+  <text x="406" y="204" font-size="10.5" fill="#134e4a">développement sans matériel + protocole filaire réel</text>
+
+  <rect x="750" y="128" width="340" height="96" rx="12" fill="#f0fdfa" stroke="#0d9488" stroke-width="1.6"/>
+  <text x="766" y="152" font-size="14" font-weight="bold" fill="#0f766e">IMPORT CSV</text>
+  <text x="766" y="172" font-size="10.5" fill="#134e4a">VED · Torque · Car Scanner · logs sauvages de forums</text>
+  <text x="766" y="188" font-size="10.5" fill="#134e4a">'bring your own log' — un CSV WhatsAppé fonctionne</text>
+  <text x="766" y="204" font-size="10.5" fill="#134e4a">14 904 trajets réels y sont passés (le soak)</text>
+
+  <rect x="1110" y="128" width="340" height="96" rx="12" fill="#f0fdfa" stroke="#0d9488" stroke-width="1.6"/>
+  <text x="1126" y="152" font-size="14" font-weight="bold" fill="#0f766e">PRODUCTEUR CAN</text>
+  <text x="1126" y="172" font-size="10.5" fill="#134e4a">trames → survey du bus → décodage DBC (opendbc, MIT)</text>
+  <text x="1126" y="188" font-size="10.5" fill="#134e4a">compteur/checksum classifiés avant tout décodage</text>
+  <text x="1126" y="204" font-size="10.5" fill="#134e4a">ÉCOUTE SEULE — aucune API d'émission (doc 00)</text>
+
+  <line x1="200" y1="224" x2="200" y2="246" stroke="#475569" stroke-width="2" marker-end="url(#arrS)"/>
+  <line x1="560" y1="224" x2="560" y2="246" stroke="#475569" stroke-width="2" marker-end="url(#arrS)"/>
+  <line x1="920" y1="224" x2="920" y2="246" stroke="#475569" stroke-width="2" marker-end="url(#arrS)"/>
+  <line x1="1280" y1="224" x2="1280" y2="246" stroke="#475569" stroke-width="2" marker-end="url(#arrS)"/>
+
+  <!-- ============ REGISTRE ============ -->
+  <rect x="30" y="250" width="1420" height="100" rx="14" fill="#1e293b" stroke="#0f172a" stroke-width="1.6"/>
+  <text x="50" y="284" font-size="17" font-weight="bold" fill="#f8fafc">REGISTRE DE PREUVES</text>
+  <text x="255" y="284" font-size="11.5" fill="#94a3b8">JSONL append-only · un schéma · replay = test de régression gratuit · le dossier EST l'interface d'ingestion</text>
+  <text x="50" y="310" font-size="10.5" font-family="Consolas, monospace" fill="#cbd5e1">session_start · complaint · history · vin · dtc · freeze_frame · mode06 · module_scan · pid_sample · window · flag</text>
+  <text x="50" y="328" font-size="10.5" font-family="Consolas, monospace" fill="#cbd5e1">triage_finding · hypothesis_ranking · task · physical_test · measurement · verdict · fix_plan · verification · outcome</text>
+  <text x="1430" y="344" text-anchor="end" font-size="10.5" font-style="italic" fill="#64748b">les octets bruts ne franchissent jamais cette ligne — seuls les événements typés passent</text>
+
+  <line x1="740" y1="350" x2="740" y2="388" stroke="#475569" stroke-width="2.5" marker-end="url(#arrS)"/>
+
+  <!-- ============ ENTONNOIR ============ -->
+  <text x="30" y="378" font-size="12.5" font-weight="bold" letter-spacing="2" fill="#2563eb">L'ENTONNOIR D'ATTENTION — ÉCONOMIE DE TOKENS SANS PERTE DIAGNOSTIQUE</text>
+
+  <rect x="30" y="392" width="250" height="104" rx="12" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.5"/>
+  <text x="46" y="416" font-size="14" font-weight="bold" fill="#1d4ed8">L0 · BRUT</text>
+  <text x="46" y="434" font-size="10.5" fill="#1e3a8a">chaque échantillon reste au registre</text>
+  <text x="46" y="450" font-size="10.5" fill="#1e3a8a">la compression delta est une lentille</text>
+  <text x="46" y="466" font-size="10.5" fill="#1e3a8a">de tokens, jamais une poubelle</text>
+
+  <rect x="302" y="392" width="340" height="104" rx="12" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+  <text x="318" y="416" font-size="14" font-weight="bold" fill="#1d4ed8">L1 · FENÊTRES + RÈGLES</text>
+  <text x="318" y="434" font-size="10.5" fill="#1e3a8a">fenêtres dérivées des données — jamais des labels</text>
+  <text x="318" y="450" font-size="10.5" fill="#1e3a8a">ralenti · échauffement · palier · croisière · charge</text>
+  <text x="318" y="466" font-size="10.5" fill="#1e3a8a">14 règles déterministes — chaque flag porte</text>
+  <text x="318" y="482" font-size="10.5" fill="#1e3a8a">ses valeurs + son message (provenance)</text>
+
+  <rect x="664" y="392" width="230" height="104" rx="12" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5 3"/>
+  <text x="680" y="416" font-size="14" font-weight="bold" fill="#475569">L2 · EMPLACEMENT RÉSERVÉ</text>
+  <text x="680" y="434" font-size="10.5" fill="#334155">iForest + auto-encodeur</text>
+  <text x="680" y="450" font-size="10.5" fill="#334155">Phase 2 — le zéro-modèle</text>
+  <text x="680" y="466" font-size="10.5" fill="#334155">est le canon actuel</text>
+
+  <rect x="916" y="392" width="250" height="104" rx="12" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.5"/>
+  <text x="932" y="416" font-size="14" font-weight="bold" fill="#1d4ed8">L3 · DIGEST</text>
+  <text x="932" y="434" font-size="10.5" fill="#1e3a8a">~1–1,5K tokens</text>
+  <text x="932" y="450" font-size="10.5" fill="#1e3a8a">la seule chose que le LLM</text>
+  <text x="932" y="466" font-size="10.5" fill="#1e3a8a">lit sans qu'on le lui demande</text>
+
+  <rect x="1188" y="392" width="262" height="104" rx="12" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.5"/>
+  <text x="1204" y="416" font-size="14" font-weight="bold" fill="#1d4ed8">L4 · LLM (OPTIONNEL)</text>
+  <text x="1204" y="434" font-size="10.5" fill="#1e3a8a">Nemotron 550B — le floor-test</text>
+  <text x="1204" y="450" font-size="10.5" fill="#1e3a8a">outils de forage : get_samples,</text>
+  <text x="1204" y="466" font-size="10.5" fill="#1e3a8a">get_mode06 · replay_segment</text>
+  <text x="1204" y="482" font-size="10.5" fill="#1e3a8a">hors ligne → repli sur le lexique</text>
+
+  <line x1="284" y1="444" x2="298" y2="444" stroke="#475569" stroke-width="2" marker-end="url(#arrS)"/>
+  <line x1="646" y1="444" x2="660" y2="444" stroke="#475569" stroke-width="2" marker-end="url(#arrS)"/>
+  <line x1="896" y1="444" x2="910" y2="444" stroke="#475569" stroke-width="2" marker-end="url(#arrS)"/>
+  <line x1="1168" y1="444" x2="1182" y2="444" stroke="#475569" stroke-width="2" marker-end="url(#arrS)"/>
+
+  <text x="30" y="516" font-size="11" font-style="italic" fill="#64748b">garde hybride : les fenêtres exigent le moteur qui tourne (leçon du soak VED — 92 HEV empoisonnent les fenêtres de ralenti)</text>
+
+  <!-- ============ LA BOUCLE ============ -->
+  <text x="30" y="554" font-size="12.5" font-weight="bold" letter-spacing="2" fill="#475569">LA BOUCLE EN 9 ÉTAPES — L'APP EST CETTE BOUCLE</text>
+  <text x="680" y="554" text-anchor="end" font-size="11" font-style="italic" fill="#64748b">les étapes 3–4 consomment les flags de l'entonnoir</text>
+
+  <!-- E0 -->
+  <rect x="40" y="582" width="640" height="80" rx="12" fill="#f0f9ff" stroke="#0284c7" stroke-width="1.6"/>
+  <circle cx="74" cy="622" r="15" fill="#334155"/><text x="74" y="627" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">0</text>
+  <text x="102" y="612" font-size="14" font-weight="bold" fill="#0f172a">DÉMARRAGE RAPIDE — tout est optionnel</text>
+  <text x="102" y="632" font-size="11" fill="#334155">plainte en une ligne : FR ou darija, tout script, mélangés dans la même phrase</text>
+  <text x="102" y="647" font-size="11" fill="#334155">chips + « travaux récents ? » — deux chemins, un registre :</text>
+  <text x="102" y="662" font-size="11" fill="#334155">extraction LLM (optionnelle) + lexique hors ligne — zéro saisie fonctionne</text>
+
+  <line x1="360" y1="662" x2="360" y2="680" stroke="#475569" stroke-width="2" marker-end="url(#arrS)"/>
+
+  <!-- E1 -->
+  <rect x="40" y="684" width="640" height="80" rx="12" fill="#f0f9ff" stroke="#0284c7" stroke-width="1.6"/>
+  <circle cx="74" cy="724" r="15" fill="#334155"/><text x="74" y="729" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">1</text>
+  <text x="102" y="714" font-size="14" font-weight="bold" fill="#0f172a">CONNEXION + CONTRAT DE CAPACITÉS</text>
+  <text x="102" y="734" font-size="11" fill="#334155">transport : TCP · série · émulateur — empreinte de puce (détection clones)</text>
+  <text x="102" y="749" font-size="11" fill="#334155">l'abonnement = l'objet de capacités (modes · actionnement · débit)</text>
+  <text x="102" y="764" font-size="11" fill="#334155">cartes Tier C masquées par construction sur adaptateurs lecture-seule</text>
+
+  <line x1="360" y1="764" x2="360" y2="782" stroke="#475569" stroke-width="2" marker-end="url(#arrS)"/>
+
+  <!-- E2 -->
+  <rect x="40" y="786" width="640" height="80" rx="12" fill="#f0f9ff" stroke="#0284c7" stroke-width="1.6"/>
+  <circle cx="74" cy="826" r="15" fill="#334155"/><text x="74" y="831" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">2</text>
+  <text x="102" y="816" font-size="14" font-weight="bold" fill="#0f172a">AUTO-INTAKE — zéro bouton (~30 s)</text>
+  <text x="102" y="836" font-size="11" fill="#334155">VIN · codes mémorisés/en attente/permanents · trame de gel</text>
+  <text x="102" y="851" font-size="11" fill="#334155">Mode $06 avec limites usine · readiness + compteurs de cycles</text>
+  <text x="102" y="866" font-size="11" fill="#334155">carte de santé des modules · garde contact : « clé ON », jamais « bus mort »</text>
+
+  <line x1="360" y1="866" x2="360" y2="884" stroke="#475569" stroke-width="2" marker-end="url(#arrS)"/>
+
+  <!-- E3 -->
+  <rect x="40" y="888" width="640" height="80" rx="12" fill="#eef2ff" stroke="#6366f1" stroke-width="1.6"/>
+  <circle cx="74" cy="928" r="15" fill="#334155"/><text x="74" y="933" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">3</text>
+  <text x="102" y="918" font-size="14" font-weight="bold" fill="#0f172a">ENTONNOIR + TRIAGE — constats lus avec les indices</text>
+  <text x="102" y="938" font-size="11" fill="#334155">fenêtres + règles → flags (L1, ci-dessus) → constats de triage</text>
+  <text x="102" y="953" font-size="11" fill="#334155">défaut · dérive vers limites · MANIPULATION : forensique (moteur Rapport Confiance)</text>
+  <text x="102" y="968" font-size="11" fill="#334155">constats appariés (« votre sifflement colle avec +22% trims ») · orientation honnête</text>
+
+  <line x1="360" y1="968" x2="360" y2="986" stroke="#475569" stroke-width="2" marker-end="url(#arrS)"/>
+
+  <!-- E4 -->
+  <rect x="40" y="990" width="640" height="80" rx="12" fill="#eef2ff" stroke="#6366f1" stroke-width="1.6"/>
+  <circle cx="74" cy="1030" r="15" fill="#334155"/><text x="74" y="1035" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">4</text>
+  <text x="102" y="1020" font-size="14" font-weight="bold" fill="#0f172a">CLASSEMENT — le cerveau déterministe</text>
+  <text x="102" y="1040" font-size="11" fill="#334155">13 playbooks activés par codes / flags / travaux récents déclarés</text>
+  <text x="102" y="1055" font-size="11" fill="#334155">score = prior × chips × mesures × tests × retour atelier × historique</text>
+  <text x="102" y="1070" font-size="11" fill="#334155">confiance = force × √part — chaque multiplicateur atterrit dans la piste d'explication</text>
+
+  <line x1="360" y1="1070" x2="360" y2="1088" stroke="#475569" stroke-width="2" marker-end="url(#arrS)"/>
+
+  <!-- E5 -->
+  <rect x="40" y="1092" width="640" height="146" rx="12" fill="#f8fafc" stroke="#64748b" stroke-width="1.6"/>
+  <circle cx="74" cy="1132" r="15" fill="#334155"/><text x="74" y="1137" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">5</text>
+  <text x="102" y="1122" font-size="14" font-weight="bold" fill="#0f172a">TÂCHES — deux voies, jamais bloquantes</text>
+
+  <rect x="102" y="1156" width="275" height="74" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="1.4"/>
+  <text x="114" y="1174" font-size="12" font-weight="bold" fill="#15803d">AUTO — l'agent seul</text>
+  <text x="114" y="1190" font-size="10.5" fill="#14532d">surveillance live · minage de fenêtres</text>
+  <text x="114" y="1204" font-size="10.5" fill="#14532d">veille Mode $06 · re-classement à chaque événement</text>
+  <text x="114" y="1218" font-size="10.5" fill="#14532d">rédaction du dossier — le tech est ailleurs</text>
+
+  <rect x="395" y="1156" width="275" height="74" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="1.4"/>
+  <text x="407" y="1174" font-size="12" font-weight="bold" fill="#b45309">BESOIN-DE-TOI — cartes en file (≤5)</text>
+  <text x="407" y="1190" font-size="10.5" fill="#78350f">spray · wiggle · échange · jauges · vérif codage</text>
+  <text x="407" y="1204" font-size="10.5" fill="#78350f">filtrées par carburant (pas d'échange bobine sur dCi)</text>
+  <text x="407" y="1218" font-size="10.5" fill="#78350f">NBA = UNE carte · réponses = événements</text>
+
+  <line x1="360" y1="1238" x2="360" y2="1250" stroke="#475569" stroke-width="2" marker-end="url(#arrS)"/>
+
+  <!-- E6 losange verdict -->
+  <polygon points="360,1254 680,1314 360,1374 40,1314" fill="#fff7ed" stroke="#ea580c" stroke-width="2"/>
+  <text x="360" y="1284" text-anchor="middle" font-size="15" font-weight="bold" fill="#9a3412">6 · VERDICT</text>
+  <text x="360" y="1308" text-anchor="middle" font-size="11.5" fill="#7c2d12">≥ 70 → VERDICT — cité</text>
+  <text x="360" y="1324" text-anchor="middle" font-size="11.5" fill="#7c2d12">40–70 → classement + NBA</text>
+  <text x="360" y="1340" text-anchor="middle" font-size="11.5" fill="#7c2d12">&lt; 40 → escalade, jamais de devinette</text>
+
+  <text x="588" y="1262" font-size="10" font-style="italic" fill="#64748b">tout état</text>
+
+  <line x1="360" y1="1374" x2="360" y2="1386" stroke="#475569" stroke-width="2" marker-end="url(#arrS)"/>
+
+  <!-- E7 -->
+  <rect x="40" y="1390" width="640" height="80" rx="12" fill="#faf5ff" stroke="#a855f7" stroke-width="1.6"/>
+  <circle cx="74" cy="1430" r="15" fill="#334155"/><text x="74" y="1435" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">7</text>
+  <text x="102" y="1420" font-size="14" font-weight="bold" fill="#0f172a">PLAN DE RÉPARATION</text>
+  <text x="102" y="1440" font-size="11" fill="#334155">pièces en MAD (table locale) · main d'œuvre · procédure</text>
+  <text x="102" y="1455" font-size="11" fill="#334155">+ ÉTAPES DE CONFIG POST-RÉPARATION : « pas réparé tant que »</text>
+  <text x="102" y="1470" font-size="11" fill="#334155">ce n'est pas codé » — codage C2i/C3i · adaptations (doc 02 §3)</text>
+
+  <line x1="360" y1="1470" x2="360" y2="1488" stroke="#475569" stroke-width="2" marker-end="url(#arrS)"/>
+
+  <!-- E8 -->
+  <rect x="40" y="1494" width="640" height="80" rx="12" fill="#faf5ff" stroke="#a855f7" stroke-width="1.6"/>
+  <circle cx="74" cy="1534" r="15" fill="#334155"/><text x="74" y="1539" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">8</text>
+  <text x="102" y="1524" font-size="14" font-weight="bold" fill="#0f172a">VÉRIFICATION — la réparation doit se prouver</text>
+  <text x="102" y="1544" font-size="11" fill="#334155">effacement avec consentement · cycle de conduite exact du modèle</text>
+  <text x="102" y="1559" font-size="11" fill="#334155">re-vérif Mode $06 · suivi « la réparation a tenu ? »</text>
+  <text x="102" y="1574" font-size="11" fill="#334155">le DTC permanent s'efface tout seul quand la voiture accepte</text>
+
+  <line x1="360" y1="1574" x2="360" y2="1592" stroke="#475569" stroke-width="2" marker-end="url(#arrS)"/>
+
+  <!-- E9 -->
+  <rect x="40" y="1598" width="640" height="80" rx="12" fill="#fffbeb" stroke="#d97706" stroke-width="1.6"/>
+  <circle cx="74" cy="1638" r="15" fill="#334155"/><text x="74" y="1643" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">9</text>
+  <text x="102" y="1628" font-size="14" font-weight="bold" fill="#0f172a">ENREGISTREMENT — la mémoire (par VIN, haché)</text>
+  <text x="102" y="1648" font-size="11" fill="#334155">tendances inter-visites : « P0173 récurrent — vu sur 4 visites »</text>
+  <text x="102" y="1663" font-size="11" fill="#334155">label OUTCOME — ce qui a vraiment réparé (le tap de la moulinette)</text>
+  <text x="102" y="1678" font-size="11" fill="#334155">moniteurs comparés entre visites → dégradation avant le voyant</text>
+
+  <line x1="360" y1="1678" x2="360" y2="1710" stroke="#475569" stroke-width="2" marker-end="url(#arrS)"/>
+
+  <!-- ============ COLONNE DROITE ============ -->
+  <rect x="730" y="582" width="710" height="96" rx="12" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.6"/>
+  <text x="746" y="610" font-size="14" font-weight="bold" fill="#92400e">DOSSIER — l'artefact pro</text>
+  <text x="746" y="632" font-size="11.5" fill="#78350f">français · cité par les preuves · exportable à tout moment — preuve partielle =</text>
+  <text x="746" y="648" font-size="11.5" fill="#78350f">dossier partiel + « ce qui l'affinerait » (un état intermédiaire vendable)</text>
+
+  <rect x="730" y="694" width="710" height="118" rx="12" fill="#fef2f2" stroke="#dc2626" stroke-width="1.6"/>
+  <text x="746" y="722" font-size="14" font-weight="bold" fill="#991b1b">RAPPORT CONFIANCE — l'artefact acheteur (199–399 MAD)</text>
+  <text x="746" y="746" font-size="11.5"><tspan fill="#dc2626">rouge — manipulation</tspan><tspan fill="#7f1d1d"> · </tspan><tspan fill="#ea580c">orange — défauts</tspan><tspan fill="#7f1d1d"> · </tspan><tspan fill="#d97706">ambre — dérive</tspan><tspan fill="#7f1d1d"> · </tspan><tspan fill="#16a34a">vert — propre</tspan><tspan fill="#7f1d1d"> · incomplet</tspan></text>
+  <text x="746" y="768" font-size="11.5" fill="#7f1d1d">+ la boîte d'honnêteté : « ce que ce rapport NE peut pas vérifier »</text>
+  <text x="746" y="786" font-size="11.5" fill="#7f1d1d">dérivé du registre — jamais écrit à la main</text>
+
+  <rect x="730" y="828" width="710" height="40" rx="10" fill="#f8fafc" stroke="#64748b" stroke-width="1.4"/>
+  <text x="1085" y="853" text-anchor="middle" font-size="12" font-family="Consolas, monospace" fill="#334155">[OBD] [INTAKE] [PHYSICAL] [MEASUREMENT] [PHOTO] [AGENT] — chaque affirmation cite sa preuve</text>
+
+  <rect x="730" y="884" width="710" height="174" rx="12" fill="#ecfeff" stroke="#0891b2" stroke-width="1.6"/>
+  <text x="746" y="912" font-size="13.5" font-weight="bold" fill="#0e7490">L'EXPÉRIENCE DU TECH — asynchrone par conception (doc 12)</text>
+  <text x="746" y="936" font-size="12" fill="#155e75">1 · brancher — zéro tap (la plainte est optionnelle)</text>
+  <text x="746" y="958" font-size="12" fill="#155e75">2 · partir — la voie AUTO continue de travailler</text>
+  <text x="746" y="980" font-size="12" fill="#155e75">3 · le téléphone vibre : verdict prêt, ou UNE carte NBA</text>
+  <text x="746" y="1002" font-size="12" fill="#155e75">4 · répondre aux cartes quand on veut — ordre libre, ou jamais</text>
+  <text x="746" y="1024" font-size="12" fill="#155e75">5 · revenir vers un dossier fini, cité par les preuves</text>
+  <text x="746" y="1046" font-size="11" font-style="italic" fill="#64748b">≤ 30 s de temps humain par voiture — rien ne bloque jamais</text>
+
+  <rect x="730" y="1074" width="710" height="148" rx="12" fill="#f8fafc" stroke="#475569" stroke-width="1.6"/>
+  <text x="746" y="1102" font-size="13.5" font-weight="bold" fill="#0f172a">COMPORTEMENT DE CONFIANCE (doc 02 §7)</text>
+  <text x="746" y="1126" font-size="11.5" fill="#334155">≥ 70 → verdict : cause racine + citations + seconds</text>
+  <text x="746" y="1148" font-size="11.5" fill="#334155">40–70 → différentiel classé + L'UNE carte de 2 minutes</text>
+  <text x="746" y="1170" font-size="11.5" fill="#334155">&lt; 40 → escalade — le silence honnête bat une devinette</text>
+  <text x="746" y="1192" font-size="11.5" font-style="italic" fill="#64748b">mesuré : le cas manipulation escalade à 22% · contact coupé refuse à 0%</text>
+
+  <rect x="730" y="1238" width="710" height="196" rx="12" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.6"/>
+  <text x="746" y="1266" font-size="13.5" font-weight="bold" fill="#166534">GARANTIES DU PIPELINE — mesurées, pas promises</text>
+  <text x="746" y="1290" font-size="11.5" fill="#14532d">même code, données différentes → verdicts différents (la paire P0171)</text>
+  <text x="746" y="1312" font-size="11.5" fill="#14532d">voiture saine → silence : soak de 14 904 trajets, 90,7% sans flag</text>
+  <text x="746" y="1334" font-size="11.5" fill="#14532d">zéro faux flag MAF sur 6 151 trajets réels (calibré sur LOAD)</text>
+  <text x="746" y="1356" font-size="11.5" fill="#14532d">une vraie panne chronique diagnostiquée dans des données publiques (véh 249)</text>
+  <text x="746" y="1378" font-size="11.5" fill="#14532d">LLM optionnel partout — un modèle mort = repli lexique</text>
+  <text x="746" y="1400" font-size="11.5" fill="#14532d">~1,5K tokens/dossier hors ligne · ~3,3K avec LLM → les 49–99 MAD tiennent</text>
+
+  <rect x="730" y="1450" width="710" height="228" rx="12" fill="#eef2ff" stroke="#6366f1" stroke-width="1.6"/>
+  <text x="746" y="1478" font-size="13.5" font-weight="bold" fill="#3730a3">POINTS D'ENTRÉE — python -m mecanic …</text>
+  <text x="746" y="1502" font-size="11.5" font-family="Consolas, monospace" fill="#312e81">run --scenario p0171_vacuum_leak.yaml — la boucle 9 étapes complète</text>
+  <text x="746" y="1524" font-size="11.5" font-family="Consolas, monospace" fill="#312e81">benchmark — 15 cas étiquetés · accord des verdicts 15/15</text>
+  <text x="746" y="1546" font-size="11.5" font-family="Consolas, monospace" fill="#312e81">connect tcp://127.0.0.1:35000 | serial:COM3 — une voiture réelle</text>
+  <text x="746" y="1568" font-size="11.5" font-family="Consolas, monospace" fill="#312e81">replay session.jsonl — un test de régression gratuit</text>
+  <text x="746" y="1590" font-size="11.5" font-family="Consolas, monospace" fill="#312e81">outcome --session … — enregistrer ce qui a vraiment réparé</text>
+  <text x="746" y="1612" font-size="11.5" font-family="Consolas, monospace" fill="#312e81">confiance session.jsonl — le rapport acheteur, depuis le registre</text>
+  <text x="746" y="1634" font-size="11.5" font-family="Consolas, monospace" fill="#312e81">soak VED/ [--diagnose 249] — soak de flotte · diagnostic voiture réelle</text>
+  <text x="746" y="1656" font-size="11.5" font-family="Consolas, monospace" fill="#312e81">can frames.csv --dbc data/dbc/… — survey CAN + décodage (écoute seule)</text>
+  <text x="746" y="1674" font-size="11" font-style="italic" fill="#475569">104 tests · zéro dépendance dure · fonctionne entièrement hors ligne</text>
+
+  <!-- ============ CONNECTEURS DU VERDICT ============ -->
+  <polyline points="520,1278 712,1278 712,630 724,630" fill="none" stroke="#475569" stroke-width="1.6" marker-end="url(#arrS)"/>
+  <text x="560" y="1270" font-size="10" font-style="italic" fill="#64748b">tout état</text>
+  <polyline points="680,1308 694,1308 694,1162 684,1162" fill="none" stroke="#d97706" stroke-width="1.8" stroke-dasharray="6 4" marker-end="url(#arrG)"/>
+  <text transform="rotate(-90 706 1235)" x="706" y="1235" text-anchor="middle" font-size="10.5" font-style="italic" fill="#b45309">40–70 → L'UNE carte NBA · les réponses fusionnent → re-classement</text>
+
+  <!-- ============ VOLANT D'INERTIE ============ -->
+  <rect x="30" y="1714" width="1420" height="90" rx="12" fill="#fffbeb" stroke="#d97706" stroke-width="1.6" stroke-dasharray="7 4"/>
+  <text x="50" y="1742" font-size="14" font-weight="bold" fill="#92400e">LE VOLANT D'INERTIE — le moat (doc 00 étape 9)</text>
+  <text x="50" y="1764" font-size="12" fill="#78350f">chaque session clôturée : label d'issue (ce qui a vraiment réparé) → playbooks + priors s'affinent → la prochaine voiture se classe mieux</text>
+  <text x="50" y="1784" font-size="12" fill="#78350f">des patterns vérifiés par l'issue, sur le parc réel — la donnée qu'aucun concurrent ne possède</text>
+
+  <polyline points="30,1749 20,1749 20,1030 34,1030" fill="none" stroke="#d97706" stroke-width="1.8" stroke-dasharray="6 4" marker-end="url(#arrG)"/>
+  <text transform="rotate(-90 13 1390)" x="13" y="1390" text-anchor="middle" font-size="10.5" font-style="italic" fill="#b45309">le volant d'inertie — chaque session clôturée aiguise le diagnostic suivant</text>
+
+  <!-- ============ PIED DE PAGE ============ -->
+  <text x="740" y="1852" text-anchor="middle" font-size="13" fill="#475569">benchmark 15/15 · 104 tests · calibré sur 14 904 trajets VED réels · Nemotron testé au plancher · écoute seule partout</text>
+  <text x="740" y="1876" text-anchor="middle" font-size="13" fill="#475569">pas de devinette sous 70 · chaque affirmation cite sa preuve typée · le LLM est optionnel par construction · replay = régression</text>
+</svg>

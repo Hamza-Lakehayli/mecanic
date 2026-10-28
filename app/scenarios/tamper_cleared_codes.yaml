@@ -1,0 +1,29 @@
+# Labeled CI scenario — tamper forensics (doc 17 §4.1): codes wiped before
+# sale. Permanent P0171 survives, non-continuous monitors incomplete, no
+# stored/pending codes, MIL off. The Rapport Confiance verdict: "effacement
+# récent" + one monitor drifting. NO diagnostic verdict must be guessed.
+name: tamper_cleared_codes
+adapter: {chip: "ELM327 v1.5", max_poll_hz: 4}
+vehicle:
+  vin: "VF3UEAHZC98765432"
+  decode: {make: Peugeot, model: 208, year: 2015, engine: "1.6 BlueHDi", fuel: diesel, displacement_l: 1.6}
+  ecus: {7E8: ECM}
+  baseline: {RPM: 800, LOAD: 20, ECT: 84, IAT: 27, MAF: 12.0, MAP: 30, SPEED: 0, TPS: 10, STFT_B1: 0, LTFT_B1: 0, O2_B1S1: 0.45, BATV: 14.0, EGR_ERR: 0}
+  readiness: {mil: false, dtc_count: 0, monitors: {misfire: complete, fuel_system: complete, cc_component: complete, catalyst: incomplete, evap: incomplete, o2_sensor: incomplete, o2_heater: incomplete, egr: incomplete}}
+  dtcs: {stored: [], pending: [], permanent: [P0171]}
+  freeze_frame: null
+  mode06:
+    - {mid: 1, tid: 5, value: 63, min: 60, max: 100}
+    - {mid: 1, tid: 2, value: 0.7, min: 0.2, max: 1.0}
+timeline:
+  - {window: warm_up, duration_s: 100, values: {RPM: 950, ECT: {from: 24, to: 76}, MAF: 13}}
+  - {window: idle, duration_s: 90, values: {RPM: 800, ECT: 84, LTFT_B1: 2, STFT_B1: 1, MAF: 12.0}, noise: {RPM: 10, O2_B1S1: 0.12}}
+  - {window: cruise, duration_s: 90, values: {RPM: 1900, SPEED: 58, LOAD: 26, ECT: 84, LTFT_B1: 1, STFT_B1: 1}, noise: {}}
+complaint:
+  text: "Controle avant achat du vehicule"
+  chips: []
+simulate: []
+expected:
+  root_cause: null
+  status: escalate
+  triage_contains: [tamper_cleared_codes, drift_1_5]

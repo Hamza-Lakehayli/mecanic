@@ -1,0 +1,23 @@
+[project]
+name = "mecanic"
+version = "0.1.0"
+description = "Mecanic Study - AI-powered vehicle diagnostics: producer -> evidence ledger -> consumer pipeline (doc 14), the 9-step loop (doc 00), Phase 1 read-only agent."
+readme = "README.md"
+requires-python = ">=3.10"
+# Zero hard dependencies by design: offline-first, runs on a fresh Python.
+# PyYAML is used when present (playbooks/scenarios); otherwise the bundled
+# strict YAML-subset loader (mecanic/yamlmini.py) is used automatically.
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+
+[project.scripts]
+mecanic = "mecanic.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["mecanic"]

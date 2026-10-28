@@ -1,0 +1,29 @@
+# Labeled CI scenario — healthy diesel (VED-style normal baseline, doc 17
+# §4.1): zero codes, zero flags. Zero-flags + zero-codes is itself a finding
+# (doc 16 §3) — the agent must say so honestly, not invent anything.
+name: healthy_dci
+adapter: {chip: "ELM327 v1.5", max_poll_hz: 4}
+vehicle:
+  vin: "UU1RBSCD987123456"
+  decode: {make: Dacia, model: Duster, year: 2019, engine: "1.5 dCi K9K 110", fuel: diesel, displacement_l: 1.5}
+  ecus: {7E8: ECM}
+  baseline: {RPM: 810, LOAD: 20, ECT: 85, IAT: 26, MAF: 12.1, MAP: 30, SPEED: 0, TPS: 10, STFT_B1: 0, LTFT_B1: 0, O2_B1S1: 0.45, BATV: 14.1, EGR_ERR: 0}
+  readiness: {mil: false, dtc_count: 0, monitors: {misfire: complete, fuel_system: complete, cc_component: complete, catalyst: complete, evap: complete, o2_sensor: complete, o2_heater: complete, egr: complete}}
+  dtcs: {stored: [], pending: [], permanent: []}
+  freeze_frame: null
+  mode06:
+    - {mid: 1, tid: 2, value: 0.5, min: 0.2, max: 1.0}
+    - {mid: 1, tid: 5, value: 88, min: 60, max: 100}
+    - {mid: 1, tid: 7, value: 72, min: 40, max: 90}
+timeline:
+  - {window: warm_up, duration_s: 100, values: {RPM: 950, ECT: {from: 25, to: 78}, MAF: 13}}
+  - {window: idle, duration_s: 90, values: {RPM: 810, ECT: 85, LTFT_B1: 1, STFT_B1: 0, MAF: 12.1}, noise: {RPM: 8, O2_B1S1: 0.12, LTFT_B1: 0.4}}
+  - {window: cruise, duration_s: 120, values: {RPM: 2100, SPEED: 62, LOAD: 26, ECT: 85, LTFT_B1: 1, STFT_B1: 0}, noise: {RPM: 15}}
+complaint:
+  text: ""
+  chips: []
+simulate: []
+expected:
+  root_cause: null
+  status: escalate
+  triage_contains: []

@@ -1,0 +1,22 @@
+# DTC title table (top families seed — doc 02 pattern library companion).
+
+P0171: {fr: "Système trop pauvre, Bank 1"}
+P0174: {fr: "Système trop pauvre, Bank 2"}
+P0300: {fr: "Ratés d'allumage aléatoires détectés"}
+P0301: {fr: "Ratés — cylindre 1"}
+P0302: {fr: "Ratés — cylindre 2"}
+P0303: {fr: "Ratés — cylindre 3"}
+P0304: {fr: "Ratés — cylindre 4"}
+P0420: {fr: "Rendement catalyseur sous le seuil (Bank 1)"}
+P0430: {fr: "Rendement catalyseur sous le seuil (Bank 2)"}
+P0128: {fr: "Thermostat: température moteur insuffisante"}
+P0125: {fr: "Température insuffisante pour régulation boucle fermée"}
+P0562: {fr: "Tension du système trop basse"}
+P0563: {fr: "Tension du système trop haute"}
+P0620: {fr: "Circuit de commande du générateur"}
+P0401: {fr: "Débit de recirculation des gaz (EGR) insuffisant"}
+P0402: {fr: "Débit EGR excessif"}
+P0455: {fr: "Fuite importante du système EVAP"}
+P0456: {fr: "Très petite fuite EVAP"}
+P0133: {fr: "Sonde O2 B1S1 — réponse trop lente"}
+P2463: {fr: "Suie DPF: accumulation excessive"}

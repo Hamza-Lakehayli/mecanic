@@ -1,0 +1,88 @@
+# Playbook: misfire family (P0300 / P0301–P0308) — doc 02 §3.
+id: misfire_family
+name_fr: "Ratés d'allumage (P0300 / P030X)"
+triggers:
+  dtcs: [P0300, P0301, P0302, P0303, P0304, P0305, P0306, P0307, P0308]
+  flags: [idle_unstable]
+causes:
+  - id: ignition_coil
+    label_fr: "Bobine d'allumage défaillante (cylindre identifiable)"
+    base_prior: 0.30
+    boosted_by: []
+    suppressed_by: []
+    chips_boost: [rough_idle, rain]
+    cards: [swap_coil, photo_spark_plugs]
+    fix:
+      parts: [{ref: ignition_coil, qty: 1}]
+      labor_h: 0.5
+      procedure:
+        - "Échanger la bobine du cylindre en raté avec un autre cylindre — le raté suit-il la bobine ? (l'agent compare avant/après)"
+        - "Si le raté suit: bobine morte. Remplacer + bougie du cylindre."
+  - id: spark_plug_worn
+    label_fr: "Bougies usées / écartement incorrect"
+    base_prior: 0.15
+    boosted_by: []
+    suppressed_by: []
+    chips_boost: [rough_idle, power_loss]
+    cards: [photo_spark_plugs]
+    fix:
+      parts: [{ref: spark_plug_set, qty: 4}]
+      labor_h: 0.8
+      procedure:
+        - "Sortir les bougies, photo de chaque (l'agent lit: blanc = pauvre, noir sec = riche, huileux = huile, tan = sain)."
+        - "Remplacer le jeu complet au gabarit d'écartement du moteur."
+  - id: injector_clogged
+    label_fr: "Injecteur encrassé / débit faible (cœur de métier dCi/HDi/TDI)"
+    base_prior: 0.18
+    boosted_by: [trim_lean_overall]
+    suppressed_by: []
+    chips_boost: [under_load, power_loss]
+    cards: [gauge_fuel_pressure, injector_balance_tierC]
+    fix:
+      parts: [{ref: injector_cleaner, qty: 1}]
+      labor_h: 1.0
+      procedure:
+        - "Tier C: test de coupure injecteur par injecteur (équilibrage cylindre) — la chute RPM par cylindre désigne le fautif."
+        - "Sinon: nettoyage/test d'injecteurs en atelier spécialisé; coder l'injecteur neuf (C2I/C3I sur dCi)."
+  - id: lean_misfire
+    label_fr: "Ratés par mélange pauvre (fuite d'admission)"
+    base_prior: 0.12
+    boosted_by: [trim_idle_dominant, trim_lean_overall]
+    suppressed_by: []
+    chips_boost: [hissing, idle_only]
+    cards: [spray_test, hold_2500_rpm]
+    fix:
+      parts: [{ref: intake_hose, qty: 1}]
+      labor_h: 0.6
+      procedure:
+        - "Confirmer d'abord la fuite (trims) — voir le playbook mélange pauvre."
+  - id: compression_low
+    label_fr: "Compression faible (soupape, segment, joint de culasse)"
+    base_prior: 0.10
+    boosted_by: []
+    suppressed_by: []
+    chips_boost: [white_smoke, blue_smoke, coolant_loss]
+    cards: [gauge_compression]
+    fix:
+      parts: []
+      labor_h: 3.0
+      procedure:
+        - "Test de compression par cylindre (jauge — variance > 15% signale le cylindre faible)."
+        - "Selon le résultat: soupapes, segments ou culasse — escalader vers mécanique."
+  - id: egr_washover
+    label_fr: "EGR qui déverse (diesel: calamine, gaz recirculés)"
+    base_prior: 0.15
+    boosted_by: []
+    suppressed_by: []
+    chips_boost: [rough_idle, black_smoke]
+    cards: [egr_visual_check]
+    fix:
+      parts: [{ref: egr_cleaner, qty: 1}]
+      labor_h: 1.2
+      procedure:
+        - "Déposer/nettoyer la valve EGR et son circuit (calamine)."
+verification:
+  drive_cycle: generic_obd2
+  recheck_mode06: ["10_02"]
+  note_fr: "Ne pas conduire sous charge avec des ratés actifs (le carburant brut tue le catalyseur) — doc 10."
+notes_fr: "Freeze frame au moment du raté: à froid ? sous la pluie ? sous charge ? — la trame oriente directement la cause (l'agent l'a lue)."

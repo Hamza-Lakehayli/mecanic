@@ -1,0 +1,28 @@
+# Labeled CI scenario — the winter queue (doc 05 §7): 1.5 dCi that won't start
+# below 5°C, white smoke when it finally fires. Freeze frame at 2°C/cranking;
+# the per-plug resistance measurement finishes it. Battery voltage is fine at
+# idle (13.8 V) so the charging path stays out — glow plugs, not alternator.
+name: p0670_glow_plugs
+adapter: {chip: "ELM327 v1.5", max_poll_hz: 4}
+vehicle:
+  vin: "UU1HSDC3456440015"
+  decode: {make: Dacia, model: Logan, year: 2012, engine: "1.5 dCi K9K", fuel: diesel, displacement_l: 1.5}
+  ecus: {7E8: ECM}
+  baseline: {RPM: 830, LOAD: 22, ECT: 4, IAT: 3, MAF: 10.8, MAP: 34, SPEED: 0, TPS: 9, BATV: 13.8, EGR_ERR: 0}
+  readiness: {mil: true, dtc_count: 1, monitors: {misfire: complete, fuel_system: complete, cc_component: complete}}
+  dtcs: {stored: [P0670], pending: [], permanent: []}
+  freeze_frame: {dtc: P0670, values: {RPM: 320, ECT: 2, LOAD: 45, BATV: 11.9}}
+timeline:
+  - {window: warm_up, duration_s: 90, values: {RPM: 950, ECT: {from: 4, to: 55}, MAF: 11}, noise: {RPM: 20}}
+  - {window: idle, duration_s: 90, values: {RPM: 830, ECT: 62, MAF: 10.8, BATV: 13.8}, noise: {RPM: 25}}
+  - {window: cruise, duration_s: 70, values: {RPM: 2100, SPEED: 55, LOAD: 28, MAF: 16, ECT: 70}, noise: {RPM: 18}}
+complaint:
+  text: "Démarre très difficile le matin à froid, grosse fumée blanche au démarrage puis ça passe"
+  chips: [hard_start, cold_only, white_smoke]
+simulate:
+  - {card: gauge_glow_plugs, value: 4.5}
+expected:
+  root_cause: glow_plug_worn
+  min_confidence: 70
+  status: verdict
+  must_flags: [cold_soak_freeze]

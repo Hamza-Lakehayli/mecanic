@@ -1,0 +1,30 @@
+# Labeled CI scenario — the after-refueling classic (doc 02 §3 EVAP): P0455
+# "gross leak" the morning after a fill-up. The gas cap wins on priors + the
+# 30-second cap check; the smoke machine stays in the queue behind it.
+# Petrol Sandero — EVAP is a petrol system.
+name: p0455_evap_cap
+adapter: {chip: "ELM327 v1.5", max_poll_hz: 4}
+vehicle:
+  vin: "UU1HSCBhh123450001"
+  decode: {make: Dacia, model: Sandero, year: 2014, engine: "1.2 16v", fuel: essence, displacement_l: 1.2}
+  ecus: {7E8: ECM}
+  baseline: {RPM: 800, LOAD: 21, ECT: 87, IAT: 28, MAF: 2.0, MAP: 30, SPEED: 0, TPS: 10, STFT_B1: 0, LTFT_B1: 1, O2_B1S1: 0.45, BATV: 14.0, EGR_ERR: 0}
+  readiness: {mil: true, dtc_count: 1, monitors: {misfire: complete, fuel_system: complete, cc_component: complete, catalyst: complete, evap: incomplete, o2_sensor: complete, o2_heater: complete}}
+  dtcs: {stored: [P0455], pending: [], permanent: []}
+  freeze_frame: {dtc: P0455, values: {RPM: 800, ECT: 84, LOAD: 20}}
+  mode06:
+    - {mid: 21, tid: 1, value: 0.55, min: 0.8, max: 3.5}   # EVAP pressure rise FAILED
+timeline:
+  - {window: warm_up, duration_s: 60, values: {RPM: 950, ECT: {from: 20, to: 85}, MAF: 2.3}, noise: {RPM: 15}}
+  - {window: idle, duration_s: 100, values: {RPM: 800, ECT: 87, MAF: 2.0, LTFT_B1: 1, STFT_B1: 0, O2_B1S1: 0.45, BATV: 14.0}, noise: {RPM: 10, O2_B1S1: 0.15}}
+  - {window: cruise, duration_s: 90, values: {RPM: 2400, SPEED: 62, LOAD: 27, MAF: 7.7, ECT: 87, LTFT_B1: 1, STFT_B1: 0}, noise: {RPM: 20}}
+complaint:
+  text: "Le voyant moteur s'est allumé juste après le plein à la station"
+  chips: [mil_on, after_refuel]
+simulate:
+  - {card: check_gas_cap, result: loose_damaged}
+expected:
+  root_cause: gas_cap_seal
+  min_confidence: 70
+  status: verdict
+  triage_contains: [paired_refuel_evap]

@@ -1,0 +1,35 @@
+# Drive-cycle library (doc 15 stage 8): how to complete each monitor per
+# model. Public/smog-check-industry derived; per-OEM expansion is the
+# Phase 2 knowledge work. v1: generic OBD-II + the diesel parc leaders.
+
+generic_obd2:
+  name_fr: "Cycle de conduite générique OBD-II (tous modèles)"
+  steps:
+    - "Froid: démarrer sans toucher l'accélérateur, ralenti ~2,5 min (clim/chauffage coupés)."
+    - "Conduite urbaine ~10 min: accélérations douces 50–60 km/h, décélérations frein moteur."
+    - "Route ~8 min: 80–100 km/h régime stable."
+    - "Sans couper le contact: redémarrer la séquence si un moniteur reste incomplet."
+
+renault_dci_drive:
+  name_fr: "Renault/Dacia dCi — cycle moniteurs (après effacement)"
+  steps:
+    - "Froid (moteur < 30 °C): contact ON 10 s, démarrer, ralenti 3 min clim coupée."
+    - "Rouler 15 min entre 1500 et 3000 tr/min (3e/4e), charge modérée — laisse le moniteur EGR/moniteur oxygène tourner."
+    - "Stabiliser 90–110 km/h 5 min (catalyseur), puis décélération frein moteur jusqu'à l'arrêt."
+    - "Ralentir à l'arrêt 2 min contact ON — le moniteur DPF/EGR se conclut au ralenti."
+
+peugeot_hdi_drive:
+  name_fr: "Peugeot/Citroën HDi — cycle moniteurs"
+  steps:
+    - "Démarrage à froid, ralenti 5 min (préchauffage puis stabilité)."
+    - "40–60 km/h pendant 10 min, accélérations franches mais régulières."
+    - "90–110 km/h pendant 6–8 min pour catalyseur + O2."
+    - "Retour au ralenti 3 min sans couper le contact."
+
+vw_tdi_drive:
+  name_fr: "VAG TDI — cycle moniteurs"
+  steps:
+    - "Démarrage à froid, ralenti 4 min."
+    - "Conduite mixte 20 min: 60 km/h en 3e/4e (EGR), 100 km/h stabilisé (catalyseur)."
+    - "Une décélération longue frein moteur depuis 80 km/h (EGR secondaire)."
+    - "Ralenti final 2 min, contact non coupé."

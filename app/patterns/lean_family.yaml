@@ -1,0 +1,106 @@
+# Playbook: lean family (P0171/P0174) — the flagship discriminator (doc 02 §1–2).
+# AI-authored v1 from documented methodology; validated on the Edge Impulse
+# labeled air-leak case + emulator scenarios (doc 17 §4.1).
+id: lean_family
+name_fr: "Mélange trop pauvre (P0171/P0174)"
+triggers:
+  dtcs: [P0171, P0174]
+  flags: [trim_lean_overall]
+causes:
+  - id: vacuum_leak
+    label_fr: "Fuite d'air non mesuré (durite admission, PCV, purge coincée, joint collecteur)"
+    base_prior: 0.30
+    boosted_by: [trim_idle_dominant, trim_common_cause]
+    suppressed_by: [trim_flow_scaled, trim_load_only]
+    chips_boost: [hissing, idle_only, cold_only]
+    cards: [spray_test, smoke_machine, hold_2500_rpm]
+    fix:
+      parts: [{ref: intake_hose, qty: 1}, {ref: hose_clamp, qty: 2}]
+      labor_h: 0.6
+      procedure:
+        - "Localiser la fuite (test pulvérisation ou machine à fumée — l'agent surveille STFT en direct)."
+        - "Remplacer la durite/joint concerné; vérifier le raccord PCV et le collier."
+        - "Effacer les codes (consentement), cycle de conduite, re-vérifier trims < ±5% à vide."
+  - id: maf_underreport
+    label_fr: "Débitmètre d'air (MAF) qui sous-estime — sale ou défaillant"
+    base_prior: 0.22
+    boosted_by: [trim_flow_scaled, maf_underreport]
+    suppressed_by: [trim_idle_dominant, maf_overreport]
+    chips_boost: [power_loss]
+    cards: [unplug_maf, photo_maf_part_number, hold_2500_rpm]
+    fix:
+      parts: [{ref: maf_cleaner, qty: 1}]
+      labor_h: 0.4
+      procedure:
+        - "Nettoyer le fil chaud du débitmètre (spray nettoyant MAF), jamais de contact."
+        - "Comparer MAF au ralenti vs table de référence pour ce moteur (l'agent l'a déjà calculée)."
+        - "Si toujours sous-estimé: remplacer le débitmètre — ATTENTION contrefaçons: photo du numéro de pièce pour vérification."
+  - id: fuel_delivery_weak
+    label_fr: "Alimentation carburant faible (pompe, filtre, injecteur encrassé, régulateur)"
+    base_prior: 0.15
+    boosted_by: [trim_load_only, trim_flow_scaled]
+    suppressed_by: [trim_idle_dominant]
+    chips_boost: [under_load, power_loss, hard_start]
+    cards: [gauge_fuel_pressure, hold_2500_rpm]
+    fix:
+      parts: [{ref: fuel_filter, qty: 1}]
+      labor_h: 0.8
+      procedure:
+        - "Mesurer la pression rail au ralenti et à 2500 tr/min (jauge — l'agent pré-remplit la plage usine)."
+        - "Filtre d'abord (le moins cher), puis test de débit volume, puis pompe."
+  - id: o2_sensor_biased
+    label_fr: "Sonde O2/AF qui ment sur le mélange (biaisée, câblage)"
+    base_prior: 0.10
+    boosted_by: [o2_stuck]
+    suppressed_by: []
+    chips_boost: []
+    cards: [tap_test, photo_maf_part_number]
+    fix:
+      parts: [{ref: o2_sensor_b1, qty: 1}]
+      labor_h: 0.5
+      procedure:
+        - "Vérifier que la sonde commute 0,1–0,9 V (l'agent surveille le taux de commutation)."
+        - "Avant de condamner: photo du numéro de pièce — sondes contrefaites monnaie courante."
+  - id: exhaust_leak_upstream
+    label_fr: "Fuite d'échappement avant la sonde O2 (aspire de l'air frais)"
+    base_prior: 0.08
+    boosted_by: [trim_idle_dominant]
+    suppressed_by: []
+    chips_boost: [hissing]
+    cards: [spray_test]
+    fix:
+      parts: [{ref: exhaust_gasket, qty: 1}]
+      labor_h: 1.0
+      procedure:
+        - "Chercher des traces de suie aux joints du collecteur/avant-sonde."
+        - "Réparer le joint/fuite; re-vérifier les trims après."
+  - id: egr_leaking
+    label_fr: "EGR qui fuit quand il devrait être fermé (flux non mesuré)"
+    base_prior: 0.08
+    boosted_by: [trim_idle_dominant]
+    suppressed_by: []
+    chips_boost: [idle_only, rough_idle]
+    cards: [egr_visual_check]
+    fix:
+      parts: [{ref: egr_valve, qty: 1}]
+      labor_h: 1.2
+      procedure:
+        - "Inspection visuelle de la valve EGR (état, calamine)."
+        - "Tier C seulement: balayage EGR commandé via le VCI (carte filtrée si adaptateur lecture-seule)."
+  - id: intake_restriction
+    label_fr: "Restriction d'admission (filtre bouché, moteur en speed-density)"
+    base_prior: 0.07
+    boosted_by: []
+    suppressed_by: []
+    chips_boost: []
+    cards: [air_filter_check]
+    fix:
+      parts: [{ref: air_filter, qty: 1}]
+      labor_h: 0.2
+      procedure:
+        - "Vérifier/remplacer le filtre à air; inspecter le conduit d'admission."
+verification:
+  drive_cycle: generic_obd2
+  recheck_mode06: ["1_2", "1_3"]
+  note_fr: "Le code permanent P0171 s'effacera de lui-même quand la voiture confirmera le correctif (2 cycles complets)."
+notes_fr: "Diesel (dCi/HDi/TDI): vérifier aussi la prise d'air après le débitmètre (colliers), et le circuit de purge. Fuite admission = ratés à froid prioritaire sur ce parc."

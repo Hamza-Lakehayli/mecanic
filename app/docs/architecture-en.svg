@@ -1,0 +1,280 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1460" height="1970" viewBox="0 0 1460 1970" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="arrS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker>
+    <marker id="arrG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#d97706"/></marker>
+  </defs>
+
+  <rect width="1460" height="1970" fill="#f8fafc"/>
+
+  <!-- ============ TITLE ============ -->
+  <text x="730" y="44" text-anchor="middle" font-size="28" font-weight="bold" fill="#0f172a">MECANIC — how the app works</text>
+  <text x="730" y="72" text-anchor="middle" font-size="14.5" fill="#475569">producers → evidence ledger → consumers — the agent never sees raw adapter bytes (doc 14)</text>
+
+  <!-- ============ SOURCES ============ -->
+  <text x="30" y="116" font-size="12.5" font-weight="bold" letter-spacing="2" fill="#0d9488">SOURCES — EVERY SOURCE SPEAKS THE SAME TYPED EVENTS</text>
+
+  <rect x="30" y="128" width="335" height="96" rx="12" fill="#f0fdfa" stroke="#0d9488" stroke-width="1.6"/>
+  <text x="46" y="152" font-size="14.5" font-weight="bold" fill="#0f766e">ELM327 DRIVER</text>
+  <text x="46" y="172" font-size="11" fill="#134e4a">real adapter: BLE · USB · TCP (ELM327-emulator)</text>
+  <text x="46" y="188" font-size="11" fill="#134e4a">AT init · chip fingerprint (clone detection)</text>
+  <text x="46" y="204" font-size="11" fill="#134e4a">tolerant parse — NO DATA = unsupported, not a crash</text>
+
+  <rect x="385" y="128" width="335" height="96" rx="12" fill="#f0fdfa" stroke="#0d9488" stroke-width="1.6"/>
+  <text x="401" y="152" font-size="14.5" font-weight="bold" fill="#0f766e">EMULATOR</text>
+  <text x="401" y="172" font-size="11" fill="#134e4a">scripted YAML vehicles — 15 labeled CI cases</text>
+  <text x="401" y="188" font-size="11" fill="#134e4a">speaking REAL ELM327 hex through the same driver</text>
+  <text x="401" y="204" font-size="11" fill="#134e4a">zero-hardware development + real wire protocol</text>
+
+  <rect x="740" y="128" width="335" height="96" rx="12" fill="#f0fdfa" stroke="#0d9488" stroke-width="1.6"/>
+  <text x="756" y="152" font-size="14.5" font-weight="bold" fill="#0f766e">CSV IMPORTER</text>
+  <text x="756" y="172" font-size="11" fill="#134e4a">VED · Torque · Car Scanner · wild forum logs</text>
+  <text x="756" y="188" font-size="11" fill="#134e4a">'bring your own log' — a WhatsApp'd CSV works</text>
+  <text x="756" y="204" font-size="11" fill="#134e4a">14,904 real trips soaked through it</text>
+
+  <rect x="1095" y="128" width="335" height="96" rx="12" fill="#f0fdfa" stroke="#0d9488" stroke-width="1.6"/>
+  <text x="1111" y="152" font-size="14.5" font-weight="bold" fill="#0f766e">CAN PRODUCER</text>
+  <text x="1111" y="172" font-size="11" fill="#134e4a">frames → bus survey → DBC decode (opendbc, MIT)</text>
+  <text x="1111" y="188" font-size="11" fill="#134e4a">counter/checksum classified before any decode</text>
+  <text x="1111" y="204" font-size="11" fill="#134e4a">LISTEN-ONLY — no transmit API exists (doc 00)</text>
+
+  <line x1="197" y1="224" x2="197" y2="246" stroke="#475569" stroke-width="2" marker-end="url(#arrS)"/>
+  <line x1="552" y1="224" x2="552" y2="246" stroke="#475569" stroke-width="2" marker-end="url(#arrS)"/>
+  <line x1="907" y1="224" x2="907" y2="246" stroke="#475569" stroke-width="2" marker-end="url(#arrS)"/>
+  <line x1="1262" y1="224" x2="1262" y2="246" stroke="#475569" stroke-width="2" marker-end="url(#arrS)"/>
+
+  <!-- ============ LEDGER ============ -->
+  <rect x="30" y="250" width="1400" height="100" rx="14" fill="#1e293b" stroke="#0f172a" stroke-width="1.6"/>
+  <text x="50" y="284" font-size="17" font-weight="bold" fill="#f8fafc">EVIDENCE LEDGER</text>
+  <text x="215" y="284" font-size="12" fill="#94a3b8">append-only JSONL · one schema · replay = a free regression test · the dossier IS the ingestion interface</text>
+  <text x="50" y="310" font-size="10.5" font-family="Consolas, monospace" fill="#cbd5e1">session_start · complaint · history · vin · dtc · freeze_frame · mode06 · module_scan · pid_sample · window · flag</text>
+  <text x="50" y="328" font-size="10.5" font-family="Consolas, monospace" fill="#cbd5e1">triage_finding · hypothesis_ranking · task · physical_test · measurement · verdict · fix_plan · verification · outcome</text>
+  <text x="1410" y="344" text-anchor="end" font-size="10.5" font-style="italic" fill="#64748b">raw adapter bytes never cross this line — only typed events</text>
+
+  <line x1="730" y1="350" x2="730" y2="390" stroke="#475569" stroke-width="2.5" marker-end="url(#arrS)"/>
+
+  <!-- ============ ATTENTION FUNNEL ============ -->
+  <text x="30" y="380" font-size="12.5" font-weight="bold" letter-spacing="2" fill="#2563eb">ATTENTION FUNNEL — TOKEN EFFICIENCY WITHOUT DIAGNOSTIC LOSS</text>
+
+  <rect x="30" y="394" width="250" height="104" rx="12" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.5"/>
+  <text x="46" y="418" font-size="14" font-weight="bold" fill="#1d4ed8">L0 · RAW</text>
+  <text x="46" y="436" font-size="11" fill="#1e3a8a">every sample is kept in the ledger</text>
+  <text x="46" y="452" font-size="11" fill="#1e3a8a">delta-compression is a token lens,</text>
+  <text x="46" y="468" font-size="11" fill="#1e3a8a">never a garbage bin</text>
+
+  <rect x="300" y="394" width="330" height="104" rx="12" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+  <text x="316" y="418" font-size="14" font-weight="bold" fill="#1d4ed8">L1 · WINDOWS + RULES</text>
+  <text x="316" y="436" font-size="11" fill="#1e3a8a">windows derived from the data — never labels</text>
+  <text x="316" y="452" font-size="11" fill="#1e3a8a">idle · warm-up · rev-hold · cruise · load</text>
+  <text x="316" y="468" font-size="11" fill="#1e3a8a">14 deterministic rules — every flag carries</text>
+  <text x="316" y="484" font-size="11" fill="#1e3a8a">its values + message (provenance)</text>
+
+  <rect x="650" y="394" width="230" height="104" rx="12" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5 3"/>
+  <text x="666" y="418" font-size="14" font-weight="bold" fill="#475569">L2 · SLOT RESERVED</text>
+  <text x="666" y="436" font-size="11" fill="#334155">iForest + autoencoder</text>
+  <text x="666" y="452" font-size="11" fill="#334155">Phase 2 — zero-model</text>
+  <text x="666" y="468" font-size="11" fill="#334155">is the current canon</text>
+
+  <rect x="900" y="394" width="250" height="104" rx="12" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.5"/>
+  <text x="916" y="418" font-size="14" font-weight="bold" fill="#1d4ed8">L3 · DIGEST</text>
+  <text x="916" y="436" font-size="11" fill="#1e3a8a">~1–1.5K tokens</text>
+  <text x="916" y="452" font-size="11" fill="#1e3a8a">the only thing the LLM</text>
+  <text x="916" y="468" font-size="11" fill="#1e3a8a">reads unprompted</text>
+
+  <rect x="1170" y="394" width="260" height="104" rx="12" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.5"/>
+  <text x="1186" y="418" font-size="14" font-weight="bold" fill="#1d4ed8">L4 · LLM (OPTIONAL)</text>
+  <text x="1186" y="436" font-size="11" fill="#1e3a8a">Nemotron 550B — the floor-test</text>
+  <text x="1186" y="452" font-size="11" fill="#1e3a8a">drill-down tools: get_samples,</text>
+  <text x="1186" y="468" font-size="11" fill="#1e3a8a">get_mode06 · replay_segment</text>
+  <text x="1186" y="484" font-size="11" fill="#1e3a8a">offline → lexicon fallback</text>
+
+  <line x1="282" y1="446" x2="296" y2="446" stroke="#475569" stroke-width="2" marker-end="url(#arrS)"/>
+  <line x1="632" y1="446" x2="646" y2="446" stroke="#475569" stroke-width="2" marker-end="url(#arrS)"/>
+  <line x1="882" y1="446" x2="896" y2="446" stroke="#475569" stroke-width="2" marker-end="url(#arrS)"/>
+  <line x1="1152" y1="446" x2="1166" y2="446" stroke="#475569" stroke-width="2" marker-end="url(#arrS)"/>
+
+  <text x="30" y="518" font-size="11" font-style="italic" fill="#64748b">hybrid gate: windows require the engine running (a VED-soak lesson — 92 HEVs poison idle windows)</text>
+
+  <!-- ============ THE 9-STEP LOOP ============ -->
+  <text x="30" y="556" font-size="12.5" font-weight="bold" letter-spacing="2" fill="#475569">THE 9-STEP LOOP — THE APP IS THIS LOOP</text>
+  <text x="620" y="556" text-anchor="end" font-size="11" font-style="italic" fill="#64748b">stages 3–4 consume the funnel's flags</text>
+
+  <!-- S0 -->
+  <rect x="40" y="584" width="580" height="80" rx="12" fill="#f0f9ff" stroke="#0284c7" stroke-width="1.6"/>
+  <circle cx="72" cy="624" r="15" fill="#334155"/><text x="72" y="629" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">0</text>
+  <text x="98" y="614" font-size="14" font-weight="bold" fill="#0f172a">QUICK START — everything optional</text>
+  <text x="98" y="634" font-size="11" fill="#334155">one-line complaint: FR or Darija, any script, mixed in one sentence</text>
+  <text x="98" y="649" font-size="11" fill="#334155">chips + 'what was repaired recently?' — two paths, one ledger:</text>
+  <text x="98" y="664" font-size="11" fill="#334155">LLM extraction (optional) + offline lexicon — zero input still works</text>
+
+  <line x1="330" y1="664" x2="330" y2="684" stroke="#475569" stroke-width="2" marker-end="url(#arrS)"/>
+
+  <!-- S1 -->
+  <rect x="40" y="688" width="580" height="80" rx="12" fill="#f0f9ff" stroke="#0284c7" stroke-width="1.6"/>
+  <circle cx="72" cy="728" r="15" fill="#334155"/><text x="72" y="733" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">1</text>
+  <text x="98" y="718" font-size="14" font-weight="bold" fill="#0f172a">CONNECT + CAPABILITY CONTRACT</text>
+  <text x="98" y="738" font-size="11" fill="#334155">transport: TCP · serial · in-process emulator — chip fingerprint</text>
+  <text x="98" y="753" font-size="11" fill="#334155">subscription = the capability object (modes · actuation · poll rate)</text>
+  <text x="98" y="768" font-size="11" fill="#334155">Tier-C actuation cards hidden by construction on read-only adapters</text>
+
+  <line x1="330" y1="768" x2="330" y2="788" stroke="#475569" stroke-width="2" marker-end="url(#arrS)"/>
+
+  <!-- S2 -->
+  <rect x="40" y="792" width="580" height="80" rx="12" fill="#f0f9ff" stroke="#0284c7" stroke-width="1.6"/>
+  <circle cx="72" cy="832" r="15" fill="#334155"/><text x="72" y="837" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">2</text>
+  <text x="98" y="822" font-size="14" font-weight="bold" fill="#0f172a">AUTO-INTAKE — zero button presses (~30 s)</text>
+  <text x="98" y="842" font-size="11" fill="#334155">VIN · stored/pending/permanent codes · freeze frame</text>
+  <text x="98" y="857" font-size="11" fill="#334155">Mode $06 with factory limits · readiness + drive-cycle counters</text>
+  <text x="98" y="872" font-size="11" fill="#334155">module health map · ignition-off guard: 'key on', never 'dead bus'</text>
+
+  <line x1="330" y1="872" x2="330" y2="892" stroke="#475569" stroke-width="2" marker-end="url(#arrS)"/>
+
+  <!-- S3 -->
+  <rect x="40" y="896" width="580" height="80" rx="12" fill="#eef2ff" stroke="#6366f1" stroke-width="1.6"/>
+  <circle cx="72" cy="936" r="15" fill="#334155"/><text x="72" y="941" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">3</text>
+  <text x="98" y="926" font-size="14" font-weight="bold" fill="#0f172a">FUNNEL + TRIAGE — findings read together with the hints</text>
+  <text x="98" y="946" font-size="11" fill="#334155">windows + rules → flags (L1, above) → triage findings</text>
+  <text x="98" y="961" font-size="11" fill="#334155">fault · drift toward limits · TAMPER forensics (Rapport Confiance engine)</text>
+  <text x="98" y="976" font-size="11" fill="#334155">paired statements ('votre sifflement colle avec +22% trims') · honest route-out</text>
+
+  <line x1="330" y1="976" x2="330" y2="996" stroke="#475569" stroke-width="2" marker-end="url(#arrS)"/>
+
+  <!-- S4 -->
+  <rect x="40" y="1000" width="580" height="80" rx="12" fill="#eef2ff" stroke="#6366f1" stroke-width="1.6"/>
+  <circle cx="72" cy="1040" r="15" fill="#334155"/><text x="72" y="1045" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">4</text>
+  <text x="98" y="1030" font-size="14" font-weight="bold" fill="#0f172a">RANKING — the deterministic brain</text>
+  <text x="98" y="1050" font-size="11" fill="#334155">13 playbooks activate on codes / flags / declared recent work</text>
+  <text x="98" y="1065" font-size="11" fill="#334155">score = prior × chips × measurements × test results × comeback × history</text>
+  <text x="98" y="1080" font-size="11" fill="#334155">confidence = strength × √share — every multiplier lands in the explainability trail</text>
+
+  <line x1="330" y1="1080" x2="330" y2="1100" stroke="#475569" stroke-width="2" marker-end="url(#arrS)"/>
+
+  <!-- S5 -->
+  <rect x="40" y="1104" width="580" height="136" rx="12" fill="#f8fafc" stroke="#64748b" stroke-width="1.6"/>
+  <circle cx="72" cy="1144" r="15" fill="#334155"/><text x="72" y="1149" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">5</text>
+  <text x="98" y="1134" font-size="14" font-weight="bold" fill="#0f172a">TASKS — two lanes, never blocking</text>
+
+  <rect x="98" y="1150" width="245" height="74" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="1.4"/>
+  <text x="110" y="1168" font-size="12" font-weight="bold" fill="#15803d">AUTO — the agent alone</text>
+  <text x="110" y="1184" font-size="10.5" fill="#14532d">live watch · window mining</text>
+  <text x="110" y="1198" font-size="10.5" fill="#14532d">Mode $06 watch · re-rank on every event</text>
+  <text x="110" y="1212" font-size="10.5" fill="#14532d">report drafting — tech is away</text>
+
+  <rect x="360" y="1150" width="245" height="74" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="1.4"/>
+  <text x="372" y="1168" font-size="12" font-weight="bold" fill="#b45309">NEEDS-YOU — queued cards (≤5)</text>
+  <text x="372" y="1184" font-size="10.5" fill="#78350f">spray · wiggle · swap · gauges · coding check</text>
+  <text x="372" y="1198" font-size="10.5" fill="#78350f">fuel-gated (no coil swap on a dCi) · NBA = ONE card</text>
+  <text x="372" y="1212" font-size="10.5" fill="#78350f">answers merge as events — any order, or never</text>
+
+  <line x1="330" y1="1240" x2="330" y2="1252" stroke="#475569" stroke-width="2" marker-end="url(#arrS)"/>
+
+  <!-- S6 verdict diamond -->
+  <polygon points="330,1256 620,1316 330,1376 40,1316" fill="#fff7ed" stroke="#ea580c" stroke-width="2"/>
+  <text x="330" y="1286" text-anchor="middle" font-size="15" font-weight="bold" fill="#9a3412">6 · VERDICT</text>
+  <text x="330" y="1310" text-anchor="middle" font-size="11.5" fill="#7c2d12">≥ 70 → VERDICT — cited</text>
+  <text x="330" y="1326" text-anchor="middle" font-size="11.5" fill="#7c2d12">40–70 → ranking + NBA</text>
+  <text x="330" y="1342" text-anchor="middle" font-size="11.5" fill="#7c2d12">&lt; 40 → escalate, never guess</text>
+
+  <text x="558" y="1286" font-size="10" font-style="italic" fill="#64748b">any state</text>
+
+  <line x1="330" y1="1376" x2="330" y2="1388" stroke="#475569" stroke-width="2" marker-end="url(#arrS)"/>
+
+  <!-- S7 -->
+  <rect x="40" y="1392" width="580" height="80" rx="12" fill="#faf5ff" stroke="#a855f7" stroke-width="1.6"/>
+  <circle cx="72" cy="1432" r="15" fill="#334155"/><text x="72" y="1437" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">7</text>
+  <text x="98" y="1422" font-size="14" font-weight="bold" fill="#0f172a">FIX PLAN</text>
+  <text x="98" y="1442" font-size="11" fill="#334155">parts priced in MAD (local table) · labor estimate · procedure</text>
+  <text x="98" y="1457" font-size="11" fill="#334155">+ POST-REPAIR CONFIG STEPS: 'not repaired until it's coded'</text>
+  <text x="98" y="1472" font-size="11" fill="#334155">injector C2i/C3i coding · adaptations · calibrations (doc 02 §3)</text>
+
+  <line x1="330" y1="1472" x2="330" y2="1492" stroke="#475569" stroke-width="2" marker-end="url(#arrS)"/>
+
+  <!-- S8 -->
+  <rect x="40" y="1496" width="580" height="80" rx="12" fill="#faf5ff" stroke="#a855f7" stroke-width="1.6"/>
+  <circle cx="72" cy="1536" r="15" fill="#334155"/><text x="72" y="1541" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">8</text>
+  <text x="98" y="1526" font-size="14" font-weight="bold" fill="#0f172a">VERIFICATION — the fix must prove itself</text>
+  <text x="98" y="1546" font-size="11" fill="#334155">consent-gated clear · the exact drive cycle for this model</text>
+  <text x="98" y="1561" font-size="11" fill="#334155">Mode $06 recheck · 'did the fix hold' follow-up</text>
+  <text x="98" y="1576" font-size="11" fill="#334155">the permanent DTC clears itself only when the car agrees</text>
+
+  <line x1="330" y1="1576" x2="330" y2="1596" stroke="#475569" stroke-width="2" marker-end="url(#arrS)"/>
+
+  <!-- S9 -->
+  <rect x="40" y="1600" width="580" height="80" rx="12" fill="#fffbeb" stroke="#d97706" stroke-width="1.6"/>
+  <circle cx="72" cy="1640" r="15" fill="#334155"/><text x="72" y="1645" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">9</text>
+  <text x="98" y="1630" font-size="14" font-weight="bold" fill="#0f172a">RECORD — the memory (per-VIN, hashed)</text>
+  <text x="98" y="1650" font-size="11" fill="#334155">cross-visit trends: 'P0173 récurrent — vu sur 4 visites'</text>
+  <text x="98" y="1665" font-size="11" fill="#334155">OUTCOME label — what actually fixed it (the flywheel tap)</text>
+  <text x="98" y="1680" font-size="11" fill="#334155">monitors compared across visits → degradation before the MIL</text>
+
+  <line x1="330" y1="1680" x2="330" y2="1712" stroke="#475569" stroke-width="2" marker-end="url(#arrS)"/>
+
+  <!-- ============ RIGHT COLUMN ============ -->
+  <rect x="690" y="584" width="740" height="96" rx="12" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.6"/>
+  <text x="706" y="612" font-size="14" font-weight="bold" fill="#92400e">DOSSIER — the pro artifact</text>
+  <text x="706" y="634" font-size="11.5" fill="#78350f">French · evidence-cited · exportable at any moment — partial evidence =</text>
+  <text x="706" y="650" font-size="11.5" fill="#78350f">partial dossier + 'what would sharpen this' (a sellable mid-state)</text>
+
+  <rect x="690" y="696" width="740" height="118" rx="12" fill="#fef2f2" stroke="#dc2626" stroke-width="1.6"/>
+  <text x="706" y="724" font-size="14" font-weight="bold" fill="#991b1b">RAPPORT CONFIANCE — the buyer artifact (199–399 MAD)</text>
+  <text x="706" y="748" font-size="11.5"><tspan fill="#dc2626">red — tamper</tspan><tspan fill="#7f1d1d"> · </tspan><tspan fill="#ea580c">orange — faults</tspan><tspan fill="#7f1d1d"> · </tspan><tspan fill="#d97706">amber — drift</tspan><tspan fill="#7f1d1d"> · </tspan><tspan fill="#16a34a">green — clean</tspan><tspan fill="#7f1d1d"> · incomplete</tspan></text>
+  <text x="706" y="770" font-size="11.5" fill="#7f1d1d">+ the honesty box: 'ce que ce rapport NE peut pas vérifier'</text>
+  <text x="706" y="788" font-size="11.5" fill="#7f1d1d">derived from the ledger — never hand-written</text>
+
+  <rect x="690" y="830" width="740" height="40" rx="10" fill="#f8fafc" stroke="#64748b" stroke-width="1.4"/>
+  <text x="1060" y="855" text-anchor="middle" font-size="12" font-family="Consolas, monospace" fill="#334155">[OBD] [INTAKE] [PHYSICAL] [MEASUREMENT] [PHOTO] [AGENT] — every claim cites its evidence</text>
+
+  <rect x="690" y="886" width="740" height="174" rx="12" fill="#ecfeff" stroke="#0891b2" stroke-width="1.6"/>
+  <text x="706" y="914" font-size="13.5" font-weight="bold" fill="#0e7490">THE TECH'S EXPERIENCE — async by design (doc 12)</text>
+  <text x="706" y="938" font-size="12" fill="#155e75">1 · plug in — zero taps (the complaint is optional)</text>
+  <text x="706" y="960" font-size="12" fill="#155e75">2 · walk away — the AUTO lane keeps working</text>
+  <text x="706" y="982" font-size="12" fill="#155e75">3 · phone buzzes: verdict ready, or ONE NBA card</text>
+  <text x="706" y="1004" font-size="12" fill="#155e75">4 · answer cards whenever — any order, or never</text>
+  <text x="706" y="1026" font-size="12" fill="#155e75">5 · return to a finished, evidence-cited dossier</text>
+  <text x="706" y="1048" font-size="11" font-style="italic" fill="#64748b">≤ 30 s of human time per car — nothing ever blocks</text>
+
+  <rect x="690" y="1076" width="740" height="148" rx="12" fill="#f8fafc" stroke="#475569" stroke-width="1.6"/>
+  <text x="706" y="1104" font-size="13.5" font-weight="bold" fill="#0f172a">CONFIDENCE BEHAVIOR (doc 02 §7)</text>
+  <text x="706" y="1128" font-size="11.5" fill="#334155">≥ 70 → verdict: root cause + citations + runner-ups</text>
+  <text x="706" y="1150" font-size="11.5" fill="#334155">40–70 → ranked differential + the ONE 2-minute card</text>
+  <text x="706" y="1172" font-size="11.5" fill="#334155">&lt; 40 → escalate — honest silence beats a guess</text>
+  <text x="706" y="1194" font-size="11.5" font-style="italic" fill="#64748b">measured: tamper escalates at 22% · ignition-off refuses at 0%</text>
+
+  <rect x="690" y="1240" width="740" height="196" rx="12" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.6"/>
+  <text x="706" y="1268" font-size="13.5" font-weight="bold" fill="#166534">PIPELINE GUARANTEES — measured, not promised</text>
+  <text x="706" y="1292" font-size="11.5" fill="#14532d">same code, different data → different verdicts (the P0171 pair)</text>
+  <text x="706" y="1314" font-size="11.5" fill="#14532d">healthy car → silence: 14,904-trip soak, 90.7% flag-free</text>
+  <text x="706" y="1336" font-size="11.5" fill="#14532d">zero false MAF flags on 6,151 real trips (LOAD-calibrated)</text>
+  <text x="706" y="1358" font-size="11.5" fill="#14532d">a real chronic fault found &amp; diagnosed in public data (veh 249, +72%)</text>
+  <text x="706" y="1380" font-size="11.5" fill="#14532d">LLM optional everywhere — a dead model = lexicon fallback</text>
+  <text x="706" y="1402" font-size="11.5" fill="#14532d">~1.5K tokens/dossier offline · ~3.3K with LLM → 49–99 MAD economics hold</text>
+
+  <rect x="690" y="1452" width="740" height="228" rx="12" fill="#eef2ff" stroke="#6366f1" stroke-width="1.6"/>
+  <text x="706" y="1480" font-size="13.5" font-weight="bold" fill="#3730a3">ENTRY POINTS — python -m mecanic …</text>
+  <text x="706" y="1504" font-size="11.5" font-family="Consolas, monospace" fill="#312e81">run --scenario p0171_vacuum_leak.yaml — the full 9-step loop</text>
+  <text x="706" y="1526" font-size="11.5" font-family="Consolas, monospace" fill="#312e81">benchmark — 15 labeled cases · verdict agreement 15/15</text>
+  <text x="706" y="1548" font-size="11.5" font-family="Consolas, monospace" fill="#312e81">connect tcp://127.0.0.1:35000 | serial:COM3 — a live car</text>
+  <text x="706" y="1570" font-size="11.5" font-family="Consolas, monospace" fill="#312e81">replay session.jsonl — a free regression test</text>
+  <text x="706" y="1592" font-size="11.5" font-family="Consolas, monospace" fill="#312e81">outcome --session … — record what actually fixed it</text>
+  <text x="706" y="1614" font-size="11.5" font-family="Consolas, monospace" fill="#312e81">confiance session.jsonl — the buyer report, from the ledger</text>
+  <text x="706" y="1636" font-size="11.5" font-family="Consolas, monospace" fill="#312e81">soak VED/ [--diagnose 249] — fleet soak · real-car diagnosis</text>
+  <text x="706" y="1658" font-size="11.5" font-family="Consolas, monospace" fill="#312e81">can frames.csv --dbc data/dbc/… — CAN survey + decode (listen-only)</text>
+  <text x="706" y="1676" font-size="11" font-style="italic" fill="#475569">104 tests · zero hard dependencies · works fully offline</text>
+
+  <!-- ============ VERDICT CONNECTORS ============ -->
+  <polyline points="523,1296 670,1296 670,632 684,632" fill="none" stroke="#475569" stroke-width="1.6" marker-end="url(#arrS)"/>
+  <polyline points="620,1316 636,1316 636,1172 626,1172" fill="none" stroke="#d97706" stroke-width="1.8" stroke-dasharray="6 4" marker-end="url(#arrG)"/>
+  <text transform="rotate(-90 650 1246)" x="650" y="1246" text-anchor="middle" font-size="10.5" font-style="italic" fill="#b45309">40–70 → the ONE NBA card · answers merge → re-rank</text>
+
+  <!-- ============ FLYWHEEL ============ -->
+  <rect x="40" y="1716" width="1390" height="90" rx="12" fill="#fffbeb" stroke="#d97706" stroke-width="1.6" stroke-dasharray="7 4"/>
+  <text x="60" y="1744" font-size="14" font-weight="bold" fill="#92400e">THE FLYWHEEL — the moat (doc 00 step 9)</text>
+  <text x="60" y="1766" font-size="12" fill="#78350f">every closed session: outcome label (what actually fixed it) → playbooks + priors sharpen → the next car ranks better</text>
+  <text x="60" y="1786" font-size="12" fill="#78350f">outcome-verified patterns on the real parc — the data no competitor owns</text>
+
+  <polyline points="40,1761 20,1761 20,1040 34,1040" fill="none" stroke="#d97706" stroke-width="1.8" stroke-dasharray="6 4" marker-end="url(#arrG)"/>
+  <text transform="rotate(-90 13 1400)" x="13" y="1400" text-anchor="middle" font-size="10.5" font-style="italic" fill="#b45309">the flywheel — every closed session sharpens the next diagnosis</text>
+
+  <!-- ============ FOOTER ============ -->
+  <text x="730" y="1852" text-anchor="middle" font-size="13" fill="#475569">15/15 benchmark · 104 tests · calibrated on 14,904 real VED trips · Nemotron floor-tested · listen-only everywhere</text>
+  <text x="730" y="1876" text-anchor="middle" font-size="13" fill="#475569">no guessing below 70 · every claim cites typed evidence · the LLM is optional by construction · replay = regression</text>
+</svg>

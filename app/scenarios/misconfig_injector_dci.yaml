@@ -1,0 +1,36 @@
+# Labeled CI scenario — the used-parts pattern (doc 02 §3, Oct 2026):
+# injector #3 swapped with a scrapyard part 2 days ago, never coded (C2i/C3i),
+# rough idle ever since. Engine: 1.5 dCi K9K (Delphi) — the Moroccan parc core.
+# The verdict must point at the MISSING CONFIGURATION STEP, not at more parts.
+# Same codes as the misfire family — history + the coding card discriminate.
+name: misconfig_injector_dci
+adapter: {chip: "ELM327 v1.5", max_poll_hz: 4}
+vehicle:
+  vin: "UU1HSDC3456440001"
+  decode: {make: Dacia, model: Logan, year: 2015, engine: "1.5 dCi K9K", fuel: diesel, displacement_l: 1.5}
+  ecus: {7E8: ECM}
+  baseline: {RPM: 795, LOAD: 20, ECT: 84, IAT: 30, MAF: 11.0, MAP: 33, SPEED: 0, TPS: 10, STFT_B1: 1, LTFT_B1: 7, O2_B1S1: 0.45, BATV: 14.1, EGR_ERR: 0}
+  readiness: {mil: true, dtc_count: 1, monitors: {misfire: complete, fuel_system: complete, cc_component: complete, catalyst: complete, evap: incomplete, o2_sensor: complete, o2_heater: complete}}
+  dtcs: {stored: [P0303], pending: [], permanent: []}
+  freeze_frame: {dtc: P0303, values: {RPM: 780, ECT: 60, LOAD: 21}}
+  mode06:
+    - {mid: 10, tid: 2, value: 18, min: 0, max: 50}
+timeline:
+  # cold start is fine; the idle is rough (σ RPM > 60 fires idle_unstable —
+  # an un-coded injector misfuels hardest at idle), cruise is clean.
+  - {window: warm_up, duration_s: 60, values: {RPM: 950, ECT: {from: 22, to: 82}, MAF: 11}, noise: {RPM: 20}}
+  - {window: idle, duration_s: 100, values: {RPM: 795, ECT: 84, MAF: 11.0, LTFT_B1: 7, STFT_B1: 1, O2_B1S1: 0.45, BATV: 14.1, MAP: 33}, noise: {RPM: 115, O2_B1S1: 0.12}}
+  - {window: cruise, duration_s: 90, values: {RPM: 2100, SPEED: 64, LOAD: 26, MAF: 18, ECT: 84, LTFT_B1: 5, STFT_B1: 1}, noise: {RPM: 25}}
+complaint:
+  text: "Le moteur broute au ralenti depuis le changement de l'injecteur 3 (pièce d'occasion)"
+  chips: [rough_idle]
+  recent_work:
+    - {system: carburant, part: "injecteur 3", when: "il y a 2 jours"}
+simulate:
+  - {card: verify_injector_coding, result: not_coded}
+expected:
+  root_cause: post_repair_config_missing
+  min_confidence: 70
+  status: verdict
+  must_flags: [idle_unstable]
+  triage_contains: [comeback_carburant_injecteur_3]

@@ -1,0 +1,31 @@
+# Labeled CI scenario — the dying O2 sensor (doc 02 §3): P0133 slow response.
+# The funnel's new o2_sluggish rule (σ of the O2 trace in the dead band) +
+# the Mode $06 response-time failure + the tap test = the evidence chain.
+# Petrol Megane.
+name: p0133_o2_lazy
+adapter: {chip: "ELM327 v1.5", max_poll_hz: 4}
+vehicle:
+  vin: "VF1RFA00541234588"
+  decode: {make: Renault, model: Megane, year: 2013, engine: "1.6 16v K4M", fuel: essence, displacement_l: 1.6}
+  ecus: {7E8: ECM}
+  baseline: {RPM: 780, LOAD: 21, ECT: 88, IAT: 27, MAF: 2.7, MAP: 31, SPEED: 0, TPS: 11, STFT_B1: 1, LTFT_B1: 2, O2_B1S1: 0.45, BATV: 13.9, EGR_ERR: 0}
+  readiness: {mil: true, dtc_count: 1, monitors: {misfire: complete, fuel_system: complete, cc_component: complete, catalyst: complete, evap: incomplete, o2_sensor: complete, o2_heater: complete}}
+  dtcs: {stored: [P0133], pending: [], permanent: []}
+  freeze_frame: {dtc: P0133, values: {RPM: 1900, ECT: 88, LOAD: 45}}
+  mode06:
+    - {mid: 1, tid: 2, value: 2.4, min: 0.2, max: 2.0}    # O2 response time FAILED (2.4s vs 2.0s)
+timeline:
+  - {window: warm_up, duration_s: 45, values: {RPM: 900, ECT: {from: 18, to: 85}, MAF: 3.0}, noise: {RPM: 15}}
+  - {window: idle, duration_s: 100, values: {RPM: 780, ECT: 88, MAF: 2.7, LTFT_B1: 2, STFT_B1: 1, O2_B1S1: 0.45, BATV: 13.9}, noise: {RPM: 12, O2_B1S1: 0.03}}
+  - {window: rev_hold, duration_s: 40, values: {RPM: 2500, ECT: 88, MAF: 8.7, LTFT_B1: 2, STFT_B1: 1, O2_B1S1: 0.45}, noise: {RPM: 25, O2_B1S1: 0.03}}
+  - {window: cruise, duration_s: 80, values: {RPM: 2200, SPEED: 58, LOAD: 30, MAF: 10.4, ECT: 88}, noise: {RPM: 20}}
+complaint:
+  text: "À-coups à l'accélération et consommation en hausse depuis quelques semaines"
+  chips: [power_loss]
+simulate:
+  - {card: tap_test, result: signal_dropout}
+expected:
+  root_cause: o2_sensor_aging
+  min_confidence: 70
+  status: verdict
+  must_flags: [o2_sluggish]

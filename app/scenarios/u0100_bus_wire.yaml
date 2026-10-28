@@ -1,0 +1,28 @@
+# Labeled CI scenario — the parts-cannon trap (doc 02 §3): U0100 "lost
+# communication with ECM". Not the module: the wiggle test finds a dropout in
+# the harness, the grounds come back clean — it's the CAN wire. The agent
+# avoids selling an ECM (and the used-ECU recoding nightmare, doc 02 §3).
+name: u0100_bus_wire
+adapter: {chip: "ELM327 v1.5", max_poll_hz: 4}
+vehicle:
+  vin: "VF1RFA00541234599"
+  decode: {make: Renault, model: Megane, year: 2013, engine: "1.6 16v K4M", fuel: essence, displacement_l: 1.6}
+  ecus: {7E8: ECM}
+  baseline: {RPM: 790, LOAD: 20, ECT: 85, IAT: 27, MAF: 2.5, MAP: 31, SPEED: 0, TPS: 10, STFT_B1: 1, LTFT_B1: 1, O2_B1S1: 0.45, BATV: 13.9, EGR_ERR: 0}
+  readiness: {mil: true, dtc_count: 1, monitors: {misfire: complete, fuel_system: complete, cc_component: complete, catalyst: complete, evap: incomplete, o2_sensor: complete, o2_heater: complete}}
+  dtcs: {stored: [U0100], pending: [], permanent: []}
+  freeze_frame: {dtc: U0100, values: {RPM: 790, ECT: 82, LOAD: 21}}
+timeline:
+  - {window: warm_up, duration_s: 40, values: {RPM: 900, ECT: {from: 20, to: 82}, MAF: 2.9}, noise: {RPM: 15}}
+  - {window: idle, duration_s: 110, values: {RPM: 790, ECT: 85, MAF: 2.5, LTFT_B1: 1, STFT_B1: 1, O2_B1S1: 0.45, BATV: 13.9}, noise: {RPM: 30, O2_B1S1: 0.15}}
+  - {window: cruise, duration_s: 70, values: {RPM: 2100, SPEED: 55, LOAD: 28, MAF: 9.2, ECT: 85}, noise: {RPM: 18}}
+complaint:
+  text: "Le compte-tours tombe à zéro de temps en temps et le voyant moteur s'est allumé"
+  chips: [mil_on]
+simulate:
+  - {card: wiggle_test, result: dropout_found}
+  - {card: ground_inspection, result: normal}
+expected:
+  root_cause: bus_wire_intermittent
+  min_confidence: 70
+  status: verdict

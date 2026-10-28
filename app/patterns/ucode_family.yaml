@@ -1,0 +1,83 @@
+# Playbook: U-code network family (U0100 lost comms...) — doc 02 §3: the
+# parts-cannon trap. "Lost communication with ECM" is usually NOT the module:
+# it's a corroded CAN wire, a flaky power/ground, or low system voltage. The
+# module map (which ECUs actually answered) is the first evidence.
+id: ucode_family
+name_fr: "Défaut réseau CAN (U-codes: communication perdue)"
+triggers:
+  dtcs: [U0100, U0101, U0121, U0126, U0140, U0151, U0155]
+  flags: []
+causes:
+  - id: bus_wire_intermittent
+    label_fr: "Fil CAN intermittent (corrosion, dommage mécanique, connecteur)"
+    base_prior: 0.26
+    boosted_by: []
+    suppressed_by: []
+    chips_boost: []
+    cards: [wiggle_test]
+    fix:
+      parts: []
+      labor_h: 1.5
+      procedure:
+        - "Le test de flexion vient de localiser le décrochage (l'agent l'a horodaté)."
+        - "Réparer le tronçon: reprise d'épissure, connecteur neuf — jamais de Scotch sur du CAN."
+        - "Vérifier les 2 lignes (CAN-H/CAN-L) à l'ohmmètre: résistance ~60 Ω entre les deux, contact coupé."
+  - id: module_power_ground
+    label_fr: "Alimentation/masse du module (relais, fusible, corrosion de masse)"
+    base_prior: 0.18
+    boosted_by: [voltage_low]
+    suppressed_by: []
+    chips_boost: []
+    cards: [ground_inspection, gauge_battery_rest]
+    fix:
+      parts: [{ref: main_ground_cable, qty: 1}]
+      labor_h: 1.0
+      procedure:
+        - "L'inspection des masses vient de trancher (l'agent a noté l'état)."
+        - "Nettoyer/resserrer les masses moteur-carrosserie; chute de tension < 0,3 V."
+  - id: low_voltage_bus
+    label_fr: "Tension système trop basse (le réseau dérape sous 11 V)"
+    base_prior: 0.15
+    boosted_by: [voltage_low, voltage_crank_dip]
+    suppressed_by: []
+    chips_boost: [hard_start, battery_light]
+    cards: [electrical_load_test, gauge_battery_rest]
+    fix:
+      parts: [{ref: battery_12v, qty: 1}]
+      labor_h: 0.3
+      procedure:
+        - "Les U-codes disparaissent quand la tension revient — mesurer (l'agent l'a fait au ralenti)."
+        - "Batterie/alternateur d'abord (le playbook charge prend le relais si P0562)."
+  - id: dead_module
+    label_fr: "Module réellement HS (en DERNIER — le diagnostic d'exclusion)"
+    base_prior: 0.12
+    boosted_by: []
+    suppressed_by: []
+    chips_boost: []
+    cards: [ground_inspection]
+    fix:
+      parts: []
+      labor_h: 2.0
+      procedure:
+        - "Un module ne se condamne qu'après: fil OK, alimentation OK, masses OK, tension OK."
+        - "Escalader: module d'occasion = recodage obligatoire (doc 02 §3, la famille misconfiguration prend le relais si installé)."
+      post_repair_steps:
+        - "Tout module remplacé doit être RECODÉ pour ce VIN (coding variante) — un module d'occasion non recodé = codes d'incompatibilité garantis (doc 02 §3)."
+  - id: can_corrosion_connector
+    label_fr: "Connecteur OBD / connecteur de porte-moteur corrodé (humidité)"
+    base_prior: 0.10
+    boosted_by: []
+    suppressed_by: []
+    chips_boost: [rain]
+    cards: [wiggle_test, ground_inspection]
+    fix:
+      parts: [{ref: contact_cleaner, qty: 1}]
+      labor_h: 0.5
+      procedure:
+        - "Inspecter les connecteurs du faisceau moteur (traces d'oxydation verte)."
+        - "Nettoyant contact + protection diélectrique."
+verification:
+  drive_cycle: generic_obd2
+  recheck_mode06: []
+  note_fr: "Après réparation: rouler et re-scanner — les U-codes intermittents ne se jugent que sur un cycle réel complet."
+notes_fr: "Règle d'or (doc 02 §3): un U-code = 10 secondes de diff du module map attendu AVANT toute commande de pièce. Le module est presque toujours innocent."

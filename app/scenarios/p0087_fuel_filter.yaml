@@ -1,0 +1,29 @@
+# Labeled CI scenario — the diesel workhorse (doc 05 §7): P0087 rail pressure
+# collapse under load. Freeze frame at 78% load / 82 km/h (the hill). The
+# gauge confirms low rail pressure; the leak-off inspection comes back clean —
+# the filter, always the filter first on this fuel market.
+name: p0087_fuel_filter
+adapter: {chip: "ELM327 v1.5", max_poll_hz: 4}
+vehicle:
+  vin: "VF1JW0MP5412345009"
+  decode: {make: Renault, model: Kangoo, year: 2013, engine: "1.5 dCi K9K 75", fuel: diesel, displacement_l: 1.5}
+  ecus: {7E8: ECM}
+  baseline: {RPM: 850, LOAD: 22, ECT: 86, IAT: 31, MAF: 11.5, MAP: 33, SPEED: 0, TPS: 9, BATV: 14.2, EGR_ERR: 0}
+  readiness: {mil: true, dtc_count: 1, monitors: {misfire: complete, fuel_system: complete, cc_component: complete}}
+  dtcs: {stored: [P0087], pending: [], permanent: []}
+  freeze_frame: {dtc: P0087, values: {RPM: 2100, ECT: 86, LOAD: 78, SPEED: 82}}
+timeline:
+  - {window: warm_up, duration_s: 45, values: {RPM: 950, ECT: {from: 20, to: 84}, MAF: 11.5}, noise: {RPM: 15}}
+  - {window: idle, duration_s: 90, values: {RPM: 850, ECT: 86, MAF: 11.5, LOAD: 22, BATV: 14.2}, noise: {RPM: 12}}
+  - {window: load, duration_s: 60, values: {RPM: 2800, SPEED: 70, LOAD: 65, MAF: 19, ECT: 86}, noise: {RPM: 25}}
+  - {window: cruise, duration_s: 70, values: {RPM: 2000, SPEED: 60, LOAD: 30, MAF: 16, ECT: 86}, noise: {RPM: 18}}
+complaint:
+  text: "Manque de puissance en côte, le moteur broute à haute charge"
+  chips: [under_load, power_loss]
+simulate:
+  - {card: gauge_fuel_pressure, value: 2.8}
+  - {card: leak_off_inspection, result: normal}
+expected:
+  root_cause: fuel_filter_clogged
+  min_confidence: 70
+  status: verdict

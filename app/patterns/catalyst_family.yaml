@@ -1,0 +1,74 @@
+# Playbook: catalyst efficiency (P0420) — "don't condemn the cat on the code
+# alone" (doc 02 §3). A false P0420 conviction is the $1,511 mistake (doc 10 §2).
+id: catalyst_family
+name_fr: "Rendement catalyseur (P0420)"
+triggers:
+  dtcs: [P0420, P0430]
+  flags: []
+causes:
+  - id: catalyst_worn
+    label_fr: "Catalyseur réellement usé (stockage d'oxygène épuisé)"
+    base_prior: 0.30
+    boosted_by: [mode06_catalyst_fail]
+    suppressed_by: [mode06_catalyst_pass]
+    chips_boost: [rotten_egg_smell]
+    cards: [drive_cycle_recheck]
+    fix:
+      parts: [{ref: catalytic_converter, qty: 1}]
+      labor_h: 2.0
+      procedure:
+        - "Comparer les sondes amont/aval: l'aval doit être quasi plat si le chat stocke l'oxygène; s'il recopie l'amont, le chat est fini."
+        - "Vérifier d'abord: fuite d'échappement, ratés (le carburant brut tue le chat), TSB logiciels (faux P0420 fréquents)."
+  - id: o2_downstream_lazy
+    label_fr: "Sonde O2 aval paresseuse (le catalyseur va bien)"
+    base_prior: 0.20
+    boosted_by: []
+    suppressed_by: []
+    chips_boost: []
+    cards: [tap_test, photo_maf_part_number]
+    fix:
+      parts: [{ref: o2_sensor_b2, qty: 1}]
+      labor_h: 0.5
+      procedure:
+        - "Tester la réponse de la sonde aval; vérifier le numéro de pièce (contrefaçons)."
+  - id: exhaust_leak_cat
+    label_fr: "Fuite d'échappement avant la sonde aval (fausse lecture)"
+    base_prior: 0.15
+    boosted_by: []
+    suppressed_by: []
+    chips_boost: [hissing]
+    cards: [spray_test]
+    fix:
+      parts: [{ref: exhaust_gasket, qty: 1}]
+      labor_h: 1.0
+      procedure:
+        - "Traces de suie, réparation du joint; re-test après."
+  - id: engine_root_cause
+    label_fr: "Cause amont: ratés ou mélange riche qui tue le chat"
+    base_prior: 0.20
+    boosted_by: [trim_lean_overall]
+    suppressed_by: []
+    chips_boost: [black_smoke, rough_idle]
+    cards: [photo_spark_plugs, hold_2500_rpm]
+    fix:
+      parts: []
+      labor_h: 1.5
+      procedure:
+        - "Traiter la cause amont d'abord (voir playbooks ratés / mélange), puis re-tester le rendement."
+  - id: false_positive_tsb
+    label_fr: "Faux positif connu (TSB / mise à jour logiciel constructeur)"
+    base_prior: 0.15
+    boosted_by: []
+    suppressed_by: []
+    chips_boost: []
+    cards: [tsb_check]
+    fix:
+      parts: []
+      labor_h: 0.5
+      procedure:
+        - "Vérifier les TSB publics pour ce modèle (reprogrammation ECM connue sur plusieurs familles P0420)."
+verification:
+  drive_cycle: generic_obd2
+  recheck_mode06: ["1_5", "1_6"]
+  note_fr: "Tendance Mode $06 sur plusieurs visites = le vrai juge (l'agent suit la dérive par VIN, doc 02 §3)."
+notes_fr: "P0420 après import: vérifier d'abord catalyseur supprimé/remplacé non conforme — fréquent sur le parc importé (doc 06)."

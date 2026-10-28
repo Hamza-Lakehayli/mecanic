@@ -1,0 +1,20 @@
+# Labeled CI scenario — the intake guard (doc 12 §2, Oct 2026): ignition OFF.
+# The adapter powers up from the battery pin (AT commands answer) but no ECU
+# responds to any mode request. The agent must say "turn the key on" — never
+# "dead bus" — and must produce NO verdict (evidence or silence).
+name: ignition_off
+adapter: {chip: "ELM327 v1.5", max_poll_hz: 4}
+vehicle:
+  silent: true          # adapter powered (AT answered); every mode request = NO DATA
+  vin: "UU1HSDC3456123999"
+  ecus: {}
+  baseline: {}
+  readiness: {}
+  dtcs: {stored: [], pending: [], permanent: []}
+timeline:
+  - {window: idle, duration_s: 30, values: {}}
+complaint: {text: "", chips: []}
+expected:
+  root_cause: null
+  status: escalate
+  triage_contains: [ignition_off_suspect]

@@ -1,0 +1,30 @@
+# Labeled CI scenario — same code P0171, different root cause: the MAF
+# under-reports, trims worsen with FLOW (doc 02 §2 second row). The
+# discriminator table must separate this from the vacuum leak above.
+name: p0171_maf_dirty
+adapter: {chip: "ELM327 v1.5", max_poll_hz: 4}
+vehicle:
+  vin: "VF1BKEF0567890123"
+  decode: {make: Renault, model: Clio, year: 2015, engine: "1.2 16v", fuel: essence, displacement_l: 1.6}
+  ecus: {7E8: ECM}
+  baseline: {RPM: 800, LOAD: 20, ECT: 87, IAT: 29, MAF: 1.65, MAP: 30, SPEED: 0, TPS: 11, STFT_B1: 0, LTFT_B1: 0, O2_B1S1: 0.45, BATV: 14.0, EGR_ERR: 0}
+  readiness: {mil: true, dtc_count: 1, monitors: {misfire: complete, fuel_system: complete, cc_component: complete, catalyst: complete, evap: complete, o2_sensor: complete, o2_heater: complete}}
+  dtcs: {stored: [P0171], pending: [], permanent: []}
+  freeze_frame: {dtc: P0171, values: {RPM: 2400, ECT: 84, LOAD: 32, LTFT_B1: 14, STFT_B1: 2}}
+  mode06:
+    - {mid: 1, tid: 2, value: 0.6, min: 0.2, max: 1.0}
+timeline:
+  - {window: warm_up, duration_s: 100, values: {RPM: 980, ECT: {from: 22, to: 75}, MAF: 1.9}}
+  - {window: idle, duration_s: 90, values: {RPM: 800, LTFT_B1: 5, STFT_B1: 2, MAF: 1.65, ECT: 87}, noise: {LTFT_B1: 0.5, RPM: 10, O2_B1S1: 0.14}}
+  - {window: rev_hold, duration_s: 45, values: {RPM: 2500, LTFT_B1: 11, STFT_B1: 3, MAF: 5.2, ECT: 87}, noise: {LTFT_B1: 0.6}}
+  - {window: cruise, duration_s: 120, values: {RPM: 2700, SPEED: 70, LOAD: 34, LTFT_B1: 13, STFT_B1: 3, MAF: 9.5, ECT: 87}, noise: {LTFT_B1: 0.6}}
+complaint:
+  text: "Manque de puissance sur route, surtout en cote"
+  chips: [power_loss, under_load]
+simulate:
+  - {card: unplug_maf, result: engine_improves}
+expected:
+  root_cause: maf_underreport
+  min_confidence: 70
+  status: verdict
+  must_flags: [trim_flow_scaled, maf_underreport]

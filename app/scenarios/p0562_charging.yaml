@@ -1,0 +1,28 @@
+# Labeled CI scenario — charging system (P0562): 12.9 V at idle under no
+# load, sags under electrical load. Doc 11 §3 electrical load test.
+name: p0562_charging
+adapter: {chip: "ELM327 v1.5", max_poll_hz: 4}
+vehicle:
+  vin: "VF7UREHJH56789012"
+  decode: {make: Citroen, model: Berlingo, year: 2016, engine: "1.6 HDi 90", fuel: diesel, displacement_l: 1.6}
+  ecus: {7E8: ECM}
+  baseline: {RPM: 790, LOAD: 19, ECT: 83, IAT: 27, MAF: 12.2, MAP: 30, SPEED: 0, TPS: 10, STFT_B1: 0, LTFT_B1: 0, O2_B1S1: 0.45, BATV: 12.9, EGR_ERR: 0}
+  readiness: {mil: true, dtc_count: 1, monitors: {misfire: complete, fuel_system: complete, cc_component: complete, catalyst: complete, evap: complete, o2_sensor: complete, o2_heater: complete}}
+  dtcs: {stored: [P0562], pending: [], permanent: []}
+  freeze_frame: {dtc: P0562, values: {RPM: 790, ECT: 83, LOAD: 19, BATV: 12.4}}
+  mode06:
+    - {mid: 1, tid: 2, value: 0.7, min: 0.2, max: 1.0}
+timeline:
+  - {window: warm_up, duration_s: 90, values: {RPM: 950, ECT: {from: 26, to: 74}, MAF: 13}}
+  - {window: idle, duration_s: 120, values: {RPM: 790, ECT: 83, LTFT_B1: 1, STFT_B1: 0, BATV: 12.9, MAF: 12.2}, noise: {BATV: 0.08, RPM: 10, O2_B1S1: 0.11}}
+  - {window: rev_hold, duration_s: 45, values: {RPM: 2200, ECT: 83, BATV: 13.6, MAF: 20}, noise: {BATV: 0.08}}
+complaint:
+  text: "Voyant batterie allume, demarrage difficile le matin"
+  chips: [battery_light, hard_start, morning]
+simulate:
+  - {card: electrical_load_test, result: voltage_sag}
+expected:
+  root_cause: alternator_fault
+  min_confidence: 70
+  status: verdict
+  must_flags: [voltage_low]

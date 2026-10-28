@@ -1,0 +1,26 @@
+# Local parts pricing bootstrap, MAD (doc 15 stage 7; doc 17 gap #5: sourced
+# from catalogs/souks, calibrated over time — estimates, not quotes).
+
+intake_hose: {name_fr: "Durite d'admission/PCV", price_mad: 80}
+hose_clamp: {name_fr: "Collier de serrage", price_mad: 15}
+maf_cleaner: {name_fr: "Nettoyant débitmètre (spray)", price_mad: 90}
+maf_sensor: {name_fr: "Débitmètre d'air (MAF)", price_mad: 650}
+fuel_filter: {name_fr: "Filtre à carburant", price_mad: 120}
+o2_sensor_b1: {name_fr: "Sonde O2 amont B1", price_mad: 550}
+o2_sensor_b2: {name_fr: "Sonde O2 aval B1", price_mad: 450}
+exhaust_gasket: {name_fr: "Joint d'échappement", price_mad: 60}
+egr_valve: {name_fr: "Vanne EGR", price_mad: 1400}
+egr_cleaner: {name_fr: "Nettoyant EGR/calamine", price_mad: 110}
+air_filter: {name_fr: "Filtre à air", price_mad: 90}
+ignition_coil: {name_fr: "Bobine d'allumage", price_mad: 420}
+spark_plug_set: {name_fr: "Jeu de bougies (4)", price_mad: 240}
+injector_cleaner: {name_fr: "Nettoyant injecteurs", price_mad: 130}
+catalytic_converter: {name_fr: "Catalyseur", price_mad: 3500}
+thermostat: {name_fr: "Thermostat + joint", price_mad: 260}
+coolant_g12: {name_fr: "Liquide de refroidissement (5 L)", price_mad: 180}
+coolant_temp_sensor: {name_fr: "Sonde température d'eau", price_mad: 180}
+fan_relay: {name_fr: "Relais ventilateur", price_mad: 140}
+alternator: {name_fr: "Alternateur (échange standard)", price_mad: 1500}
+battery_60ah: {name_fr: "Batterie 60 Ah", price_mad: 850}
+ground_cable: {name_fr: "Câble de masse", price_mad: 50}
+aux_belt: {name_fr: "Courroie d'accessoires", price_mad: 220}

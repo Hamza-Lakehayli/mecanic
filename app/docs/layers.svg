@@ -1,0 +1,185 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1480" height="1440" viewBox="0 0 1480 1440" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="arrS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker>
+    <marker id="arrP" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7c3aed"/></marker>
+  </defs>
+
+  <rect width="1480" height="1440" fill="#f8fafc"/>
+
+  <text x="740" y="44" text-anchor="middle" font-size="28" font-weight="bold" fill="#0f172a">MECANIC — l'architecture en couches</text>
+  <text x="740" y="72" text-anchor="middle" font-size="14.5" fill="#475569">présentation · application · données — chaque couche ne parle qu'à ses voisines, aux frontières contrôlées</text>
+
+  <!-- ============ COUCHE PRÉSENTATION ============ -->
+  <rect x="30" y="100" width="1180" height="260" rx="16" fill="#ecfeff" stroke="#0891b2" stroke-width="2"/>
+  <text x="50" y="130" font-size="14" font-weight="bold" fill="#0e7490">COUCHE PRÉSENTATION — ce que l'utilisateur voit (zéro logique métier)</text>
+
+  <rect x="60" y="150" width="360" height="100" rx="10" fill="#ffffff" stroke="#67e8f9" stroke-width="1.4"/>
+  <text x="76" y="174" font-size="13" font-weight="bold" fill="#0e7490">CLI — aujourd'hui</text>
+  <text x="76" y="194" font-size="10.5" fill="#155e75">run · benchmark · soak · can · confiance · outcome · replay</text>
+  <text x="76" y="210" font-size="10.5" fill="#155e75">connect — la voiture réelle (TCP / série)</text>
+  <text x="76" y="226" font-size="10.5" fill="#155e75">rend le registre : dossier, constats, cartes, verdicts</text>
+
+  <rect x="440" y="150" width="360" height="100" rx="10" fill="#ffffff" stroke="#67e8f9" stroke-width="1.4"/>
+  <text x="456" y="174" font-size="13" font-weight="bold" fill="#0e7490">APP MOBILE — la cible (phase UI)</text>
+  <text x="456" y="194" font-size="10.5" fill="#155e75">dossier · carte NBA · file de tests · notifications</text>
+  <text x="456" y="210" font-size="10.5" fill="#155e75">AUTO par défaut · INTERACTIVE opt-in (doc 12)</text>
+  <text x="456" y="226" font-size="10.5" fill="#155e75">fond : le même pipeline, une autre peau</text>
+
+  <rect x="820" y="150" width="370" height="100" rx="10" fill="#ffffff" stroke="#67e8f9" stroke-width="1.4"/>
+  <text x="836" y="174" font-size="13" font-weight="bold" fill="#0e7490">CANAL WHATSAPP — phase ultérieure (doc 07)</text>
+  <text x="836" y="194" font-size="10.5" fill="#155e75">CSV · photos · darija texte in → dossier + PDF out</text>
+  <text x="836" y="210" font-size="10.5" fill="#155e75">un canal, pas une interface temps réel</text>
+  <text x="836" y="226" font-size="10.5" fill="#155e75">le registre rend le même dossier, où qu'on écrive</text>
+
+  <text x="60" y="336" font-size="11" font-style="italic" fill="#64748b">la présentation ne calcule rien : elle rend des états du registre et collecte des saisies optionnelles</text>
+
+  <!-- flèches présentation <-> application -->
+  <line x1="500" y1="396" x2="500" y2="366" stroke="#475569" stroke-width="2" marker-end="url(#arrS)"/>
+  <text x="512" y="384" font-size="10.5" font-style="italic" fill="#64748b">états · constats · cartes · rapports</text>
+  <line x1="900" y1="364" x2="900" y2="394" stroke="#475569" stroke-width="2" marker-end="url(#arrS)"/>
+  <text x="912" y="384" font-size="10.5" font-style="italic" fill="#64748b">saisies optionnelles : plainte · chips · réponses de cartes</text>
+
+  <!-- ============ COUCHE APPLICATION ============ -->
+  <rect x="30" y="400" width="1180" height="430" rx="16" fill="#eef2ff" stroke="#6366f1" stroke-width="2"/>
+  <text x="50" y="430" font-size="14" font-weight="bold" fill="#4338ca">COUCHE APPLICATION — le cerveau : déterministe d'abord, LLM optionnel · lit UNIQUEMENT le registre</text>
+
+  <rect x="60" y="450" width="360" height="130" rx="10" fill="#ffffff" stroke="#a5b4fc" stroke-width="1.4"/>
+  <text x="76" y="474" font-size="13" font-weight="bold" fill="#3730a3">ORCHESTRATEUR — session.py</text>
+  <text x="76" y="494" font-size="10.5" fill="#312e81">la boucle 9 étapes · modes AUTO / INTERACTIVE</text>
+  <text x="76" y="510" font-size="10.5" fill="#312e81">re-classe à chaque événement du registre</text>
+  <text x="76" y="526" font-size="10.5" fill="#312e81">deux voies : AUTO (agent) + BESOIN-DE-TOI (file)</text>
+  <text x="76" y="542" font-size="10.5" fill="#312e81">rien ne bloque jamais sur l'humain</text>
+
+  <rect x="440" y="450" width="360" height="130" rx="10" fill="#ffffff" stroke="#a5b4fc" stroke-width="1.4"/>
+  <text x="456" y="474" font-size="13" font-weight="bold" fill="#3730a3">ENTONNOIR — funnel.py (L1 + L3)</text>
+  <text x="456" y="494" font-size="10.5" fill="#312e81">fenêtres dérivées des données — jamais des labels</text>
+  <text x="456" y="510" font-size="10.5" fill="#312e81">règles chiffrées : trims · O2 · MAF/LOAD · σ · warm-up</text>
+  <text x="456" y="526" font-size="10.5" fill="#312e81">digest ~1–1,5K tokens (L3) · L2 réservé (Phase 2)</text>
+  <text x="456" y="542" font-size="10.5" fill="#312e81">calibré sur 14 904 trajets VED réels</text>
+
+  <rect x="820" y="450" width="360" height="130" rx="10" fill="#ffffff" stroke="#a5b4fc" stroke-width="1.4"/>
+  <text x="836" y="474" font-size="13" font-weight="bold" fill="#3730a3">TRIAGE — triage.py</text>
+  <text x="836" y="494" font-size="10.5" fill="#312e81">défauts titrés FR · dérive vers les limites usine</text>
+  <text x="836" y="510" font-size="10.5" fill="#312e81">manipulation : codes effacés · empreintes deletes</text>
+  <text x="836" y="526" font-size="10.5" fill="#312e81">appariements indices × données · route-out honnête</text>
+  <text x="836" y="542" font-size="10.5" fill="#312e81">garde contact : « clé ON », jamais « bus mort »</text>
+
+  <rect x="60" y="595" width="360" height="130" rx="10" fill="#ffffff" stroke="#a5b4fc" stroke-width="1.4"/>
+  <text x="76" y="619" font-size="13" font-weight="bold" fill="#3730a3">CLASSEUR — ranker.py</text>
+  <text x="76" y="639" font-size="10.5" fill="#312e81">13 playbooks × priors déterministes (priors.yaml)</text>
+  <text x="76" y="655" font-size="10.5" fill="#312e81">flags × chips × mesures × tests × historique</text>
+  <text x="76" y="671" font-size="10.5" fill="#312e81">confiance = force × √part · piste d'explication complète</text>
+  <text x="76" y="687" font-size="10.5" fill="#312e81">aucun modèle appris, aucun LLM dans le calcul</text>
+
+  <rect x="440" y="595" width="360" height="130" rx="10" fill="#ffffff" stroke="#a5b4fc" stroke-width="1.4"/>
+  <text x="456" y="619" font-size="13" font-weight="bold" fill="#3730a3">MOTEUR DE TÂCHES — tasks.py</text>
+  <text x="456" y="639" font-size="10.5" fill="#312e81">cartes : data · physiques · jauges · photos · Tier C</text>
+  <text x="456" y="655" font-size="10.5" fill="#312e81">NBA = 1 carte (gain d'information maximal)</text>
+  <text x="456" y="671" font-size="10.5" fill="#312e81">filtrage par capacités + carburant · anti-fatigue ≤5</text>
+  <text x="456" y="687" font-size="10.5" fill="#312e81">les réponses fusionnent comme événements</text>
+
+  <rect x="820" y="595" width="360" height="130" rx="10" fill="#ffffff" stroke="#a5b4fc" stroke-width="1.4"/>
+  <text x="836" y="619" font-size="13" font-weight="bold" fill="#3730a3">VERDICT · PLAN · VÉRIFICATION</text>
+  <text x="836" y="639" font-size="10.5" fill="#312e81">verdict : cause + citations typées + confiance</text>
+  <text x="836" y="655" font-size="10.5" fill="#312e81">plan : pièces MAD + config post-réparation</text>
+  <text x="836" y="671" font-size="10.5" fill="#312e81">vérification : cycle · Mode $06 · consentement</text>
+  <text x="836" y="687" font-size="10.5" fill="#312e81">sous 70 : pas de verdict — la carte NBA parle</text>
+
+  <rect x="60" y="740" width="1120" height="70" rx="10" fill="#faf5ff" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="76" y="764" font-size="12.5" font-weight="bold" fill="#6d28d9">ADAPTATEUR LLM — llm.py (OPTIONNEL par construction)</text>
+  <text x="76" y="784" font-size="10.5" fill="#5b21b6">extraction FR/Darija → chips (le seul usage actif) — le LLM ne fait AUCUN calcul de diagnostic · hors ligne → repli lexique déterministe</text>
+  <text x="76" y="800" font-size="10.5" fill="#5b21b6">le pipeline ne dépend jamais du modèle — prouvé : benchmark 15/15 avec ET sans le LLM dans la boucle (doc 17 §4.1)</text>
+
+  <!-- flèches application <-> données -->
+  <line x1="500" y1="866" x2="500" y2="834" stroke="#475569" stroke-width="2" marker-end="url(#arrS)"/>
+  <text x="512" y="854" font-size="10.5" font-style="italic" fill="#64748b">l'application lit les événements typés</text>
+  <line x1="900" y1="834" x2="900" y2="864" stroke="#475569" stroke-width="2" marker-end="url(#arrS)"/>
+  <text x="912" y="854" font-size="10.5" font-style="italic" fill="#64748b">écrit : flags · verdicts · labels d'issue</text>
+
+  <!-- ============ COUCHE DONNÉES ============ -->
+  <rect x="30" y="870" width="1180" height="330" rx="16" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+  <text x="50" y="900" font-size="14" font-weight="bold" fill="#166534">COUCHE DONNÉES — append-only, rejouable, hors ligne</text>
+
+  <rect x="60" y="920" width="360" height="120" rx="10" fill="#ffffff" stroke="#86efac" stroke-width="1.4"/>
+  <text x="76" y="944" font-size="13" font-weight="bold" fill="#166534">REGISTRE DE PREUVES — ledger.py</text>
+  <text x="76" y="964" font-size="10.5" fill="#14532d">JSONL append-only par session</text>
+  <text x="76" y="980" font-size="10.5" fill="#14532d">20 types d'événements · fold / replay</text>
+  <text x="76" y="996" font-size="10.5" fill="#14532d">la source de vérité de tout le système</text>
+  <text x="76" y="1012" font-size="10.5" fill="#14532d">effacement impossible par construction</text>
+
+  <rect x="440" y="920" width="360" height="120" rx="10" fill="#ffffff" stroke="#86efac" stroke-width="1.4"/>
+  <text x="456" y="944" font-size="13" font-weight="bold" fill="#166534">PRODUCTEURS — l'écriture</text>
+  <text x="456" y="964" font-size="10.5" fill="#14532d">pilote ELM327 · émulateur · CSV · CAN</text>
+  <text x="456" y="980" font-size="10.5" fill="#14532d">contrat de capacités à la connexion</text>
+  <text x="456" y="996" font-size="10.5" fill="#14532d">empreinte de puce (détection de clones)</text>
+  <text x="456" y="1012" font-size="10.5" fill="#14532d">CAN : écoute seule, jamais d'émission</text>
+
+  <rect x="820" y="920" width="360" height="120" rx="10" fill="#ffffff" stroke="#86efac" stroke-width="1.4"/>
+  <text x="836" y="944" font-size="13" font-weight="bold" fill="#166534">BIBLIOTHÈQUE DE PATTERNS</text>
+  <text x="836" y="964" font-size="10.5" fill="#14532d">13 playbooks YAML — le contenu du cerveau</text>
+  <text x="836" y="980" font-size="10.5" fill="#14532d">causes · priors · cartes · fixes · vérification</text>
+  <text x="836" y="996" font-size="10.5" fill="#14532d">lean · misfire · catalyst · thermostat · charging</text>
+  <text x="836" y="1012" font-size="10.5" fill="#14532d">egr · misconfig · evap · o2 · dpf · fuel · glow · ucode</text>
+
+  <rect x="60" y="1050" width="360" height="120" rx="10" fill="#ffffff" stroke="#86efac" stroke-width="1.4"/>
+  <text x="76" y="1074" font-size="13" font-weight="bold" fill="#166534">ACTIFS DÉTERMINISTES</text>
+  <text x="76" y="1094" font-size="10.5" fill="#14532d">priors · lexique FR/Darija · titres DTC</text>
+  <text x="76" y="1110" font-size="10.5" fill="#14532d">décodage Mode $06 · pièces MAD · cycles</text>
+  <text x="76" y="1126" font-size="10.5" fill="#14532d">autant d'actifs auto-construits (le fossé)</text>
+  <text x="76" y="1142" font-size="10.5" fill="#14532d">calibrés sur VED : 14 904 trajets réels</text>
+
+  <rect x="440" y="1050" width="360" height="120" rx="10" fill="#ffffff" stroke="#86efac" stroke-width="1.4"/>
+  <text x="456" y="1074" font-size="13" font-weight="bold" fill="#166534">MÉMOIRE VIN + ISSUES</text>
+  <text x="456" y="1094" font-size="10.5" fill="#14532d">profils par VIN (hachés — posture CNDP)</text>
+  <text x="456" y="1110" font-size="10.5" fill="#14532d">tendances inter-visites · labels d'issue</text>
+  <text x="456" y="1126" font-size="10.5" fill="#14532d">var/outcomes.jsonl — la donnée du moat</text>
+  <text x="456" y="1142" font-size="10.5" fill="#14532d">ce que les concurrents n'auront jamais</text>
+
+  <rect x="820" y="1050" width="360" height="120" rx="10" fill="#ffffff" stroke="#86efac" stroke-width="1.4"/>
+  <text x="836" y="1074" font-size="13" font-weight="bold" fill="#166534">DBC + DATASETS</text>
+  <text x="836" y="1094" font-size="10.5" fill="#14532d">opendbc MIT : Prius (test) · Mercedes (oracle)</text>
+  <text x="836" y="1110" font-size="10.5" fill="#14532d">VED : 14 904 trajets de calibration du funnel</text>
+  <text x="836" y="1126" font-size="10.5" fill="#14532d">CSS pack · OTIDS · Edge Impulse (à débloquer)</text>
+  <text x="836" y="1142" font-size="10.5" fill="#14532d">chaque replay = un test de régression gratuit</text>
+
+  <!-- ============ SYSTÈMES EXTERNES ============ -->
+  <rect x="1240" y="150" width="210" height="130" rx="12" fill="#fef2f2" stroke="#dc2626" stroke-width="1.6"/>
+  <text x="1256" y="178" font-size="13" font-weight="bold" fill="#991b1b">LA VOITURE</text>
+  <text x="1256" y="200" font-size="10.5" fill="#7f1d1d">le bus OBD-II réel</text>
+  <text x="1256" y="216" font-size="10.5" fill="#7f1d1d">adaptateur certifié</text>
+  <text x="1256" y="232" font-size="10.5" fill="#7f1d1d">(vLinker / OBDLink)</text>
+  <text x="1256" y="248" font-size="10.5" fill="#7f1d1d">CAN : écoute seule</text>
+  <text x="1256" y="264" font-size="10.5" fill="#7f1d1d">jamais d'injection</text>
+
+  <rect x="1240" y="440" width="210" height="130" rx="12" fill="#faf5ff" stroke="#a855f7" stroke-width="1.6" stroke-dasharray="6 4"/>
+  <text x="1256" y="468" font-size="13" font-weight="bold" fill="#6d28d9">API NVIDIA</text>
+  <text x="1256" y="490" font-size="10.5" fill="#5b21b6">Nemotron 3 Ultra 550B</text>
+  <text x="1256" y="506" font-size="10.5" fill="#5b21b6">(A55B) — le floor-test</text>
+  <text x="1256" y="522" font-size="10.5" fill="#5b21b6">extraction only — optionnel</text>
+  <text x="1256" y="538" font-size="10.5" fill="#5b21b6">repli hors ligne prouvé</text>
+  <text x="1256" y="554" font-size="10.5" fill="#5b21b6">(le pipeline tourne sans)</text>
+
+  <rect x="1240" y="930" width="210" height="150" rx="12" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.6"/>
+  <text x="1256" y="958" font-size="13" font-weight="bold" fill="#1d4ed8">DATASETS PUBLICS</text>
+  <text x="1256" y="980" font-size="10.5" fill="#1e3a8a">VED : 22 semaines, 1,3 Go</text>
+  <text x="1256" y="996" font-size="10.5" fill="#1e3a8a">opendbc (DBC MIT)</text>
+  <text x="1256" y="1012" font-size="10.5" fill="#1e3a8a">OTIDS · Car-Hacking</text>
+  <text x="1256" y="1028" font-size="10.5" fill="#1e3a8a">Edge Impulse (compte)</text>
+  <text x="1256" y="1044" font-size="10.5" fill="#1e3a8a">CSS pack (newsletter)</text>
+  <text x="1256" y="1060" font-size="10.5" fill="#1e3a8a">commaCarSegments (lourd)</text>
+
+  <!-- connecteurs externes -->
+  <polyline points="1240,215 1225,215 1225,980 1214,980" fill="none" stroke="#dc2626" stroke-width="1.6" marker-end="url(#arrS)"/>
+  <polyline points="1240,505 1225,505 1225,770 1184,770" fill="none" stroke="#a855f7" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arrP)"/>
+  <polyline points="1240,1005 1225,1005 1225,1105 1214,1105" fill="none" stroke="#3b82f6" stroke-width="1.6" marker-end="url(#arrS)"/>
+
+  <!-- ============ GARANTIES AUX FRONTIÈRES ============ -->
+  <rect x="30" y="1230" width="1420" height="130" rx="12" fill="#f8fafc" stroke="#0f172a" stroke-width="1.6" stroke-dasharray="7 4"/>
+  <text x="50" y="1258" font-size="13.5" font-weight="bold" fill="#0f172a">GARANTIES AUX FRONTIÈRES</text>
+  <text x="50" y="1282" font-size="11.5" fill="#334155">l'application ne lit QUE le registre — jamais les octets bruts (doc 14) · les seuils L1 sont calibrés sur 14 904 trajets réels (doc 17 §4.2)</text>
+  <text x="50" y="1304" font-size="11.5" fill="#334155">CAN : écoute seule — aucune API d'émission n'existe dans le code (doc 00) · tout CAN-décodé est « quality: inferred » jusqu'à vérification</text>
+  <text x="50" y="1326" font-size="11.5" fill="#334155">l'absence de LLM ne bloque rien : repli déterministe prouvé en CI (15/15 avec et sans le modèle — doc 17 §4.1)</text>
+  <text x="50" y="1348" font-size="11.5" fill="#334155">l'actionnement (Tier C) n'existe qu'avec consentement + contrat de capacités — et le code d'émission de trames CAN n'existe pas du tout</text>
+
+  <text x="740" y="1396" text-anchor="middle" font-size="13" fill="#475569">104 tests · 15/15 CI · zéro dépendance dure · hors ligne d'abord · français d'abord</text>
+</svg>

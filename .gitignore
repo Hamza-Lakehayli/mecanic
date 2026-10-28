@@ -1,0 +1,19 @@
+# Internal product and design documents; retained locally, not published.
+/[0-9][0-9]-*.md
+/README.development.md
+
+# Local secrets and logs.
+.env
+.env.*
+!.env.example
+/elm.log
+
+# Python and build artifacts.
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+build/
+dist/
+*.egg-info/

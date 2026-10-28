@@ -1,0 +1,29 @@
+# Labeled CI scenario — cylinder-2 misfire (doc 02 §3): cold-start freeze
+# frame, unstable idle, coil swap confirms. Cylinder localized by the code;
+# cause confirmed by the swap test (the agent's test card).
+name: p0300_coil_cyl2
+adapter: {chip: "ELM327 v1.5", max_poll_hz: 4}
+vehicle:
+  vin: "VF1RFA00541234567"
+  decode: {make: Renault, model: Megane, year: 2014, engine: "1.6 16v K4M", fuel: essence, displacement_l: 1.6}
+  ecus: {7E8: ECM}
+  baseline: {RPM: 760, LOAD: 21, ECT: 82, IAT: 28, MAF: 2.6, MAP: 31, SPEED: 0, TPS: 11, STFT_B1: 0, LTFT_B1: 1, O2_B1S1: 0.45, BATV: 13.9, EGR_ERR: 0}
+  readiness: {mil: true, dtc_count: 1, monitors: {misfire: complete, fuel_system: complete, cc_component: complete, catalyst: complete, evap: incomplete, o2_sensor: complete, o2_heater: complete}}
+  dtcs: {stored: [P0302], pending: [P0300], permanent: []}
+  freeze_frame: {dtc: P0302, values: {RPM: 690, ECT: 12, LOAD: 25, LTFT_B1: 2}}
+  mode06:
+    - {mid: 10, tid: 2, value: 42, min: 0, max: 50}
+timeline:
+  - {window: warm_up, duration_s: 150, values: {RPM: 900, ECT: {from: 12, to: 70}, MAF: 3.2}, noise: {RPM: 25}}
+  - {window: idle, duration_s: 90, values: {RPM: 760, ECT: 80, LTFT_B1: 1, STFT_B1: 1, MAF: 2.6}, noise: {RPM: 115, O2_B1S1: 0.13}}
+  - {window: rev_hold, duration_s: 40, values: {RPM: 2400, ECT: 80, MAF: 8.2, LTFT_B1: 0}, noise: {RPM: 30}}
+complaint:
+  text: "Le moteur tremble a froid le matin, ratés au ralenti"
+  chips: [rough_idle, cold_only, morning]
+simulate:
+  - {card: swap_coil, result: misfire_followed_coil}
+expected:
+  root_cause: ignition_coil
+  min_confidence: 70
+  status: verdict
+  must_flags: [idle_unstable]

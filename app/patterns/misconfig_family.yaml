@@ -1,0 +1,43 @@
+# Playbook: post-swap / post-repair misconfiguration — the used-parts pattern
+# (doc 02 §3, Oct 2026). The used-parts repair economy creates a fault family
+# of its own: a donor ECU, injector or module fitted WITHOUT its configuration
+# step (injector C2i/C3i coding on dCi/Delphi, variant coding, adaptations,
+# calibrations). Un-coded injectors: rough idle, black smoke, poor MPG —
+# often with NO DTC at all. Catching another shop's unfinished repair is
+# comeback-prevention — the trust-builder (doc 11 §6).
+#
+# Activation is HISTORY-gated, not code-gated: relevant recent work is what
+# makes this family a candidate at all (a rough idle with nothing recently
+# swapped must NOT point here — so this playbook triggers on recent_part and
+# stays silent in every other scenario). The ranker's recent_work_boost does
+# the heavy lifting once active.
+id: misconfig_family
+name_fr: "Configuration post-réparation manquante (pièce remplacée non codée)"
+triggers:
+  dtcs: []
+  flags: []
+  recent_part: [injecteur, calculateur, ecu, boitier, boîtier, papillon]
+causes:
+  - id: post_repair_config_missing
+    label_fr: "Étape de configuration manquante après remplacement (codage injecteur C2i/C3i, adaptation, calibrage)"
+    base_prior: 0.16
+    boosted_by: [idle_unstable]
+    suppressed_by: []
+    chips_boost: [rough_idle]
+    recent_work_boost: {keywords: [injecteur, calculateur, ecu, boitier, boîtier, papillon], mult: 3.0}
+    cards: [verify_injector_coding]
+    fix:
+      parts: []
+      labor_h: 0.5
+      procedure:
+        - "Écrire le code de compensation de l'injecteur (C2i/C3i sur dCi/Delphi — gravé sur le corps de l'injecteur) dans le calculateur (UDS 0x2E via outil constructeur / Renolink; Tier C: directement depuis l'app)."
+        - "Injecteur d'occasion sans code lisible: escalader — traçabilité inconnue, risque contrefaçon / fausse référence (doc 11 §5)."
+        - "Après codage: effacer les codes (consentement), cycle de conduite, re-vérifier la stabilité du ralenti (σ RPM < 20 tr/min)."
+      post_repair_steps:
+        - "Une pièce remplacée portant un code de compensation (injecteur) ou une adaptation (papillon, calculateur, batterie/BMS) n'est PAS réparée tant que sa configuration n'est pas écrite — la réparation se vérifie configuration incluse (doc 02 §3)."
+        - "Tout futur contrôle après un échange comprend la carte « codage effectué ? » — les comebacks post-échange sont une classe de panne à part entière."
+verification:
+  drive_cycle: generic_obd2
+  recheck_mode06: ["10_02"]
+  note_fr: "Après codage, le raté doit disparaître au premier cycle complet. Si le raté persiste APRÈS codage correct: l'injecteur d'occasion lui-même est en cause (pièce usée ≠ pièce mal configurée)."
+notes_fr: "Marché des pièces d'occasion: l'injecteur non codé est le cas emblématique, mais la famille couvre tout remplacement manquant son étape de configuration — calculateur d'occasion non recodé (codes d'incompatibilité logicielle), papillon non adapté (ralenti haut), batterie sans reset BMS (état de charge faux)."

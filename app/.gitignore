@@ -1,0 +1,10 @@
+# Local secrets (.env is gitignored; never commit keys)
+.env
+# Runtime artifacts (sessions, VIN profiles, outcome store) — never commit
+var/
+elm.log
+__pycache__/
+*.pyc
+.pytest_cache/
+dist/
+build/

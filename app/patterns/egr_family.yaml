@@ -1,0 +1,63 @@
+# Playbook: EGR flow insufficient (P0401) — endemic on the diesel parc
+# (doc 10 §2 Morocco layer). Tier C actuation cards appear only when the
+# capability contract allows — filtered by construction on read-only adapters.
+id: egr_family
+name_fr: "Débit EGR insuffisant (P0401) — diesel"
+triggers:
+  dtcs: [P0401, P0402, P1404]
+  flags: []
+causes:
+  - id: egr_passage_clogged
+    label_fr: "Conduit/vanne EGR encrassés (calamine — le classique dCi)"
+    base_prior: 0.40
+    boosted_by: []
+    suppressed_by: []
+    chips_boost: [black_smoke, power_loss]
+    cards: [egr_visual_check, egr_sweep_tierC]
+    fix:
+      parts: [{ref: egr_cleaner, qty: 2}]
+      labor_h: 1.4
+      procedure:
+        - "Déposer la vanne EGR; nettoyer le clapet et le conduit (calamine)."
+        - "Tier C: balayage EGR commandé — l'agent regarde la réponse MAP/RPM (aucune réponse = passage bouché ou vanne morte)."
+  - id: egr_valve_electrical
+    label_fr: "Vanne EGR électrique (bobine, connecteur, position)"
+    base_prior: 0.25
+    boosted_by: []
+    suppressed_by: []
+    chips_boost: []
+    cards: [tap_test, wiggle_test]
+    fix:
+      parts: [{ref: egr_valve, qty: 1}]
+      labor_h: 1.0
+      procedure:
+        - "Test de flexion du faisceau EGR pendant que l'agent surveille la position commandée vs réelle."
+  - id: dpf_interaction
+    label_fr: "Interaction DPF: contre-pression / régénérations interrompues"
+    base_prior: 0.15
+    boosted_by: []
+    suppressed_by: []
+    chips_boost: [exhaust_smell]
+    cards: [dpf_check_tierC]
+    fix:
+      parts: []
+      labor_h: 1.0
+      procedure:
+        - "Tier C: lire la charge de suie + pression différentielle; régénération forcée SEULEMENT si conditions constructeur OK (gate)."
+  - id: maf_bias_gravity
+    label_fr: "Débitmètre dérivé (l'ECU calcule le débit EGR à partir du MAF)"
+    base_prior: 0.20
+    boosted_by: [maf_underreport]
+    suppressed_by: [maf_rationality_ok]
+    chips_boost: [power_loss]
+    cards: [unplug_maf, photo_maf_part_number]
+    fix:
+      parts: [{ref: maf_sensor, qty: 1}]
+      labor_h: 0.5
+      procedure:
+        - "Le calcul EGR dépend du MAF — vérifier sa rationalité (l'agent l'a comparé à la table de référence)."
+verification:
+  drive_cycle: renault_dci_drive
+  recheck_mode06: ["1_7"]
+  note_fr: "Après nettoyage/remplacement: cycle de conduite complet pour laisser le moniteur EGR re-valider seul — le permanent s'effacera de lui-même."
+notes_fr: "Garde-fou (doc 00): jamais de facilitation de suppression EGR/DPF — l'agent propose la réparation conforme, pas la dépollution. L'empreinte 'suppression' est d'ailleurs détectée par le triage (Rapport Confiance)."
