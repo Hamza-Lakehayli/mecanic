@@ -33,7 +33,7 @@ The LLM is optional. It can extract structured chips from French or Darija text;
 
 ## Architecture
 
-```text
+```
 ELM327 / emulator / CSV / CAN+DBC
                  ↓
        Append-only evidence ledger
@@ -42,7 +42,8 @@ ELM327 / emulator / CSV / CAN+DBC
                  ↓
       Test cards → verdict → fix plan
                  ↓
-          Reports → outcome record
+          Reports → outcome record 
+```
 The agent consumes typed ledger events rather than raw adapter bytes. CAN decoding is listen-only; the project does not transmit or inject raw CAN frames.
 Quick start
 From the project directory:
